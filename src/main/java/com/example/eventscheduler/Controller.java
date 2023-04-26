@@ -2,6 +2,7 @@ package com.example.eventscheduler;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 public class Controller {
@@ -16,6 +17,8 @@ public class Controller {
     private TextField nameTextField;
     @FXML
     private TextField lastNameTextField;
+    @FXML
+    private PasswordField passwordField;
 
     @FXML
     protected void onHelloButtonClick() {
@@ -24,6 +27,9 @@ public class Controller {
         sb.append(nameTextField.getText());
         sb.append(" ");
         sb.append(lastNameTextField.getText());
+        sb.append("!\n");
+        sb.append("Your password is: ");
+        sb.append(passwordField.getText());
         welcomeLabel.setText(sb.toString());
     }
 }
