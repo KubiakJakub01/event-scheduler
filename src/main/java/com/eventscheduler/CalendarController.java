@@ -33,5 +33,15 @@ public class CalendarController implements Initializable {
         today = ZonedDateTime.now();
     }
 
+    @FXML
+    void backOneMonth(ActionEvent event) {
+        dateFocus = dateFocus.minusMonths(1);
+        calendar.getChildren().clear();
+    }
 
+    @FXML
+    void forwardOneMonth(ActionEvent event) {
+        dateFocus = dateFocus.plusMonths(1);
+        calendar.getChildren().clear();
+    }
 }
