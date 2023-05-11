@@ -1,4 +1,4 @@
-package com.example.eventscheduler;
+package com.eventscheduler;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +12,7 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Calendar.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1024, 768);
-        stage.setTitle("Hello!");
+        stage.setTitle("Event scheduler");
         stage.setScene(scene);
         stage.show();
     }
