@@ -58,6 +58,9 @@ public class CalendarController implements Initializable {
         double spacingH = calendar.getHgap();
         double spacingV = calendar.getVgap();
 
+        //List of activities for a given month
+        Map<Integer, List<CalendarActivity>> calendarActivityMap = getCalendarActivitiesMonth(dateFocus);
+
         int monthMaxDate = dateFocus.getMonth().maxLength();
         //Check for leap year
         if(dateFocus.getYear() % 4 != 0 && monthMaxDate == 29){
@@ -89,6 +92,9 @@ public class CalendarController implements Initializable {
                         stackPane.getChildren().add(date);
 
                         List<CalendarActivity> calendarActivities = calendarActivityMap.get(currentDate);
+                        if(calendarActivities != null){
+                            createCalendarActivity(calendarActivities, rectangleHeight, rectangleWidth, stackPane);
+                        }
                     }
                     if(today.getYear() == dateFocus.getYear() && today.getMonth() == dateFocus.getMonth() && today.getDayOfMonth() == currentDate){
                         rectangle.setStroke(Color.BLUE);
@@ -99,5 +105,55 @@ public class CalendarController implements Initializable {
         }
     }
 
+    private void createCalendarActivity(List<CalendarActivity> calendarActivities, double rectangleHeight, double rectangleWidth, StackPane stackPane) {
+        VBox calendarActivityBox = new VBox();
+        for (int k = 0; k < calendarActivities.size(); k++) {
+            if(k >= 2) {
+                Text moreActivities = new Text("...");
+                calendarActivityBox.getChildren().add(moreActivities);
+                moreActivities.setOnMouseClicked(mouseEvent -> {
+                    //On ... click print all activities for given date
+                    System.out.println(calendarActivities);
+                });
+                break;
+            }
+            Text text = new Text(calendarActivities.get(k).getClientName() + ", " + calendarActivities.get(k).getDate().toLocalTime());
+            calendarActivityBox.getChildren().add(text);
+            text.setOnMouseClicked(mouseEvent -> {
+                //On Text clicked
+                System.out.println(text.getText());
+            });
+        }
+        calendarActivityBox.setTranslateY((rectangleHeight / 2) * 0.20);
+        calendarActivityBox.setMaxWidth(rectangleWidth * 0.8);
+        calendarActivityBox.setMaxHeight(rectangleHeight * 0.65);
+        calendarActivityBox.setStyle("-fx-background-color:GRAY");
+        stackPane.getChildren().add(calendarActivityBox);
+    }
 
+    private Map<Integer, List<CalendarActivity>> createCalendarMap(List<CalendarActivity> calendarActivities) {
+        Map<Integer, List<CalendarActivity>> calendarActivityMap = new HashMap<>();
+
+        for (CalendarActivity activity: calendarActivities) {
+            int activityDate = activity.getDate().getDayOfMonth();
+            if(!calendarActivityMap.containsKey(activityDate)){
+                calendarActivityMap.put(activityDate, List.of(activity));
+            } else {
+                List<CalendarActivity> OldListByDate = calendarActivityMap.get(activityDate);
+
+                List<CalendarActivity> newList = new ArrayList<>(OldListByDate);
+                newList.add(activity);
+                calendarActivityMap.put(activityDate, newList);
+            }
+        }
+        return  calendarActivityMap;
+    }
+
+    private Map<Integer, List<CalendarActivity>> getCalendarActivitiesMonth(ZonedDateTime dateFocus) {
+        List<CalendarActivity> calendarActivities = new ArrayList<>();
+        int year = dateFocus.getYear();
+        int month = dateFocus.getMonth().getValue();
+
+        return createCalendarMap(calendarActivities);
+    }
 }
