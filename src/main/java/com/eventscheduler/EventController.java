@@ -15,7 +15,10 @@ import java.time.ZonedDateTime;
 import java.util.ResourceBundle;
 
 public class EventController implements Initializable {
-    System.Logger logger = System.getLogger(EventController.class.getName());;
+    System.Logger logger = System.getLogger(EventController.class.getName());
+
+    private CalendarActivityObservable calendarActivityObservable;
+
 
     @FXML
     private TextField titleField;
@@ -41,6 +44,10 @@ public class EventController implements Initializable {
     @FXML
     private TextArea descriptionTextArea;
 
+//    public EventController(CalendarActivityObservable calendarActivityObservable) {
+//        this.calendarActivityObservable = calendarActivityObservable;
+//    }
+
     @FXML
     private void handleSubmit() {
         String title = titleField.getText();
@@ -55,23 +62,9 @@ public class EventController implements Initializable {
 
     private void submitNewEvent(String title, ZonedDateTime date, double time, String place, String description) {
         CalendarActivity newEvent = new CalendarActivity(title, date, time, place, description);
+        calendarActivityObservable.notifyObservers(newEvent);
         logger.log(System.Logger.Level.INFO, "New event submitted");
         closeEventWindow();
-    }
-
-    public void showEventWindow() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("EventForm.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-            Stage stage = new Stage();
-            stage.setTitle("New Window");
-            stage.setScene(scene);
-            stage.show();
-            logger.log(System.Logger.Level.INFO, "Event window opened");
-        } catch (IOException e) {
-            logger.log(System.Logger.Level.ERROR, e.getMessage());
-        }
     }
 
     private void closeEventWindow() {
@@ -107,5 +100,9 @@ public class EventController implements Initializable {
                 .or(timeField.textProperty().isEmpty())
                 .or(placeField.textProperty().isEmpty());
         handleSubmitButton.disableProperty().bind(booleanBinding);
+    }
+
+    public void setCalendarActivityObservable(CalendarActivityObservable calendarActivityObservable) {
+        this.calendarActivityObservable = calendarActivityObservable;
     }
 }

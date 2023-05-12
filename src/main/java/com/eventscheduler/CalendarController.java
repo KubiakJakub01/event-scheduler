@@ -1,14 +1,19 @@
 package com.eventscheduler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -18,8 +23,8 @@ public class CalendarController implements Initializable, Observer {
 
     private ZonedDateTime dateFocus;
     private ZonedDateTime today;
-    private EventController eventController;
     private List<CalendarActivity> calendarActivityList;
+    private CalendarActivityObservable calendarActivityObservable;
 
     @FXML
     private Text year;
@@ -34,8 +39,10 @@ public class CalendarController implements Initializable, Observer {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         dateFocus = ZonedDateTime.now();
         today = ZonedDateTime.now();
-        this.eventController = new EventController();
+        this.calendarActivityObservable = new CalendarActivityObservable();
+        this.calendarActivityObservable.addObserver(this);
         this.calendarActivityList = new ArrayList<>();
+
         drawCalendar();
     }
 
@@ -62,7 +69,21 @@ public class CalendarController implements Initializable, Observer {
 
     @FXML
     void openNewEventWindow(ActionEvent event) {
-        eventController.showEventWindow();
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("EventForm.fxml"));
+            Parent root = fxmlLoader.load();
+            EventController eventController = fxmlLoader.getController();
+            eventController.setCalendarActivityObservable(calendarActivityObservable);
+            Scene scene = new Scene(root, 600, 400);
+            Stage stage = new Stage();
+            stage.setTitle("New Window");
+            stage.setScene(scene);
+            stage.show();
+            logger.log(System.Logger.Level.INFO, "Event window opened");
+        } catch (IOException e) {
+            logger.log(System.Logger.Level.ERROR, e.getMessage());
+        }
     }
 
     private void drawCalendar(){
