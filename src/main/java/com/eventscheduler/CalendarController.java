@@ -14,6 +14,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 public class CalendarController implements Initializable, Observer {
+    private static final System.Logger logger = System.getLogger(CalendarActivity.class.getName());
 
     private ZonedDateTime dateFocus;
     private ZonedDateTime today;
@@ -34,12 +35,15 @@ public class CalendarController implements Initializable, Observer {
         dateFocus = ZonedDateTime.now();
         today = ZonedDateTime.now();
         this.eventController = new EventController();
+        this.calendarActivityList = new ArrayList<>();
         drawCalendar();
     }
 
     @Override
     public void update(Activity activity) {
         calendarActivityList.add((CalendarActivity) activity);
+        logger.log(System.Logger.Level.INFO, "New activity added to calendar");
+        drawCalendar();
     }
 
     @FXML
@@ -163,11 +167,11 @@ public class CalendarController implements Initializable, Observer {
     }
 
     private Map<Integer, List<CalendarActivity>> getCalendarActivitiesMonth(ZonedDateTime dateFocus) {
-        List<CalendarActivity> calendarActivities = new ArrayList<>();
+//        List<CalendarActivity> calendarActivities = new ArrayList<>();
         int year = dateFocus.getYear();
         int month = dateFocus.getMonth().getValue();
 
-        return createCalendarMap(calendarActivities);
+        return createCalendarMap(calendarActivityList);
     }
 
 }
