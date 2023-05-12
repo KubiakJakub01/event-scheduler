@@ -13,11 +13,12 @@ import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.*;
 
-public class CalendarController implements Initializable {
+public class CalendarController implements Initializable, Observer {
 
-    ZonedDateTime dateFocus;
-    ZonedDateTime today;
-    EventController eventController;
+    private ZonedDateTime dateFocus;
+    private ZonedDateTime today;
+    private EventController eventController;
+    private List<CalendarActivity> calendarActivityList;
 
     @FXML
     private Text year;
@@ -34,6 +35,11 @@ public class CalendarController implements Initializable {
         today = ZonedDateTime.now();
         this.eventController = new EventController();
         drawCalendar();
+    }
+
+    @Override
+    public void update(Activity activity) {
+        calendarActivityList.add((CalendarActivity) activity);
     }
 
     @FXML
@@ -163,4 +169,5 @@ public class CalendarController implements Initializable {
 
         return createCalendarMap(calendarActivities);
     }
+
 }
