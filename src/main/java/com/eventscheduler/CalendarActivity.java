@@ -8,15 +8,17 @@ public class CalendarActivity {
     private String title;
     private ZonedDateTime date;
     private String place;
-    private Float time;
+    private Double time;
     private String description;
 
-    public CalendarActivity(String title, ZonedDateTime date, String clientName, Float time, String description) {
+    public CalendarActivity(String title, ZonedDateTime date, Double time, String place, String description) {
         this.title = title;
         this.date = date;
-        this.place = clientName;
+        this.place = place;
         this.time = time;
         this.description = description;
+        // Log the creation of a new event with to string method
+        logger.log(System.Logger.Level.INFO, this.toString());
     }
 
     public String getTitle() {
@@ -43,11 +45,11 @@ public class CalendarActivity {
         this.place = place;
     }
 
-    public Float getTime() {
+    public Double getTime() {
         return time;
     }
 
-    public void setTime(Float time) {
+    public void setTime(Double time) {
         this.time = time;
     }
 
