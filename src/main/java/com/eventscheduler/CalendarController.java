@@ -17,6 +17,7 @@ public class CalendarController implements Initializable {
 
     ZonedDateTime dateFocus;
     ZonedDateTime today;
+    EventController eventController;
 
     @FXML
     private Text year;
@@ -31,6 +32,7 @@ public class CalendarController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         dateFocus = ZonedDateTime.now();
         today = ZonedDateTime.now();
+        this.eventController = new EventController();
         drawCalendar();
     }
 
@@ -46,6 +48,11 @@ public class CalendarController implements Initializable {
         dateFocus = dateFocus.plusMonths(1);
         calendar.getChildren().clear();
         drawCalendar();
+    }
+
+    @FXML
+    void openNewEventWindow(ActionEvent event) {
+        eventController.showEventWindow();
     }
 
     private void drawCalendar(){
@@ -117,7 +124,7 @@ public class CalendarController implements Initializable {
                 });
                 break;
             }
-            Text text = new Text(calendarActivities.get(k).getClientName() + ", " + calendarActivities.get(k).getDate().toLocalTime());
+            Text text = new Text(calendarActivities.get(k).getPlace() + ", " + calendarActivities.get(k).getDate().toLocalTime());
             calendarActivityBox.getChildren().add(text);
             text.setOnMouseClicked(mouseEvent -> {
                 //On Text clicked
