@@ -3,6 +3,6 @@ module com.example.eventscheduler {
     requires javafx.fxml;
 
 
-    opens com.example.eventscheduler to javafx.fxml;
-    exports com.example.eventscheduler;
+    opens com.eventscheduler to javafx.fxml;
+    exports com.eventscheduler;
 }
