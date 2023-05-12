@@ -14,6 +14,10 @@ public class Main extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 1024, 768);
         stage.setTitle("Event scheduler");
         stage.setScene(scene);
+        // Set on close request to close all windows
+        stage.setOnCloseRequest(windowEvent -> {
+            System.exit(0);
+        });
         stage.show();
     }
 
