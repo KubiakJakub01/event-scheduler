@@ -6,13 +6,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.ZonedDateTime;
 import java.util.ResourceBundle;
 
 public class EventController implements Initializable {
@@ -25,6 +24,12 @@ public class EventController implements Initializable {
     private DatePicker datePicker;
 
     @FXML
+    private Spinner hourSpinner;
+
+    @FXML
+    private Spinner minuteSpinner;
+
+    @FXML
     private TextField timeField;
 
     @FXML
@@ -34,26 +39,24 @@ public class EventController implements Initializable {
     private Button handleSubmitButton;
 
     @FXML
+    private TextArea descriptionTextArea;
+
+    @FXML
     private void handleSubmit() {
         String title = titleField.getText();
-        String date = datePicker.getValue().toString();
+        int hour = (int) hourSpinner.getValue();
+        int minute = (int) minuteSpinner.getValue();
+        ZonedDateTime date = ZonedDateTime.of(datePicker.getValue().getYear(), datePicker.getValue().getMonthValue(), datePicker.getValue().getDayOfMonth(), hour, minute, 0, 0, ZonedDateTime.now().getZone());
         double time = Double.parseDouble(timeField.getText());
         String place = placeField.getText();
-        submitNewEvent(title, date, time, place);
+        String description = descriptionTextArea.getText();
+        submitNewEvent(title, date, time, place, description);
     }
 
-    private void submitNewEvent(String title, String date, double time, String place) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("New event submitted. ");
-        sb.append("Title: ");
-        sb.append(title);
-        sb.append(", Date: ");
-        sb.append(date);
-        sb.append(", Time: ");
-        sb.append(time);
-        sb.append(", Place: ");
-        sb.append(place);
-        logger.log(System.Logger.Level.INFO, sb.toString());
+    private void submitNewEvent(String title, ZonedDateTime date, double time, String place, String description) {
+        CalendarActivity newEvent = new CalendarActivity(title, date, time, place, description);
+        logger.log(System.Logger.Level.INFO, "New event submitted");
+        closeEventWindow();
     }
 
     public void showEventWindow() {
@@ -71,8 +74,33 @@ public class EventController implements Initializable {
         }
     }
 
+    private void closeEventWindow() {
+        Stage stage = (Stage) handleSubmitButton.getScene().getWindow();
+        stage.close();
+        logger.log(System.Logger.Level.INFO, "Event window closed");
+    }
+
+    private void initSpinners() {
+        hourSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0, 1));
+        hourSpinner.setEditable(true);
+        hourSpinner.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                hourSpinner.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+        minuteSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 55, 0, 5));
+        minuteSpinner.setEditable(true);
+        minuteSpinner.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                minuteSpinner.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Initialize spinners
+        initSpinners();
         // Disable submit button until all fields are filled
         BooleanBinding booleanBinding = titleField.textProperty().isEmpty()
                 .or(datePicker.valueProperty().isNull())
