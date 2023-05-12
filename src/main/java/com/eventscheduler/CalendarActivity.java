@@ -2,7 +2,7 @@ package com.eventscheduler;
 
 import java.time.ZonedDateTime;
 
-public class CalendarActivity {
+public class CalendarActivity implements Activity{
     private static final System.Logger logger = System.getLogger(CalendarActivity.class.getName());
 
     private String title;
