@@ -44,10 +44,6 @@ public class EventController implements Initializable {
     @FXML
     private TextArea descriptionTextArea;
 
-//    public EventController(CalendarActivityObservable calendarActivityObservable) {
-//        this.calendarActivityObservable = calendarActivityObservable;
-//    }
-
     @FXML
     private void handleSubmit() {
         String title = titleField.getText();

@@ -1,7 +1,7 @@
 package com.eventscheduler;
 
-public interface Obeservable {
-    void addObserver(Obeservable observer);
-    void removeObserver(Obeservable observer);
-    void notifyObservers(CalendarActivity activity);
+public interface Observable {
+    void addObserver(Observer  observer);
+    void removeObserver(Observer  observer);
+    void notifyObservers(Activity activity);
 }
