@@ -50,6 +50,7 @@ public class CalendarController implements Initializable, Observer {
     public void update(Activity activity) {
         calendarActivityList.add((CalendarActivity) activity);
         logger.log(System.Logger.Level.INFO, "New activity added to calendar");
+        calendar.getChildren().clear();
         drawCalendar();
     }
 
