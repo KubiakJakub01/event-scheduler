@@ -13,8 +13,6 @@ import java.util.ResourceBundle;
 public class EventDetailController implements Initializable {
     System.Logger logger = System.getLogger(EventController.class.getName());
 
-    private CalendarActivityObservable calendarActivityObservable;
-
     @FXML
     private TextField titleField;
 
@@ -53,6 +51,8 @@ public class EventDetailController implements Initializable {
         // Close the window
         if (isUpdate) {
             // TODO: Update the event
+            updateComponents();
+            disableUpdateMode();
         }
         else {
             closeDetailEventWindow();
@@ -62,11 +62,40 @@ public class EventDetailController implements Initializable {
     @FXML
     private void handleUpdate(ActionEvent event) {
         logger.log(System.Logger.Level.INFO, "Update button pressed");
+        if (isUpdate) {
+            disableUpdateMode();
+        }
+        else {
+            setDisableComponents(false);
+            isUpdate = true;
+            updateButton.setText("Cancel");
+        }
     }
 
     @FXML
     private void handleDelete(ActionEvent event) {
         logger.log(System.Logger.Level.INFO, "Delete button pressed");
+    }
+
+    private void updateComponents() {
+        logger.log(System.Logger.Level.INFO, "Update components");
+//        titleField.setText(calendarActivityObservable.getTitle());
+//        datePicker.setValue(calendarActivityObservable.getDate().toLocalDate());
+//        hourSpinner.getValueFactory().setValue(calendarActivityObservable.getDate().getHour());
+//        minuteSpinner.getValueFactory().setValue(calendarActivityObservable.getDate().getMinute());
+//        timeField.setText(String.valueOf(calendarActivityObservable.getTime()));
+//        placeField.setText(calendarActivityObservable.getPlace());
+//        descriptionTextArea.setText(calendarActivityObservable.getDescription());
+    }
+
+    private void cancelUpdate() {
+        logger.log(System.Logger.Level.INFO, "Cancel update");
+    }
+
+    private void disableUpdateMode(){
+        setDisableComponents(true);
+        isUpdate = false;
+        updateButton.setText("Update");
     }
 
     private void closeDetailEventWindow() {
@@ -76,7 +105,6 @@ public class EventDetailController implements Initializable {
     }
 
     public void fillComponentsWithData(CalendarActivity calendarActivity) {
-        setCalendarActivityObservable(calendarActivityObservable);
         titleField.setText(calendarActivity.getTitle());
         datePicker.setValue(calendarActivity.getDate().toLocalDate());
         hourSpinner.getValueFactory().setValue(calendarActivity.getDate().getHour());
@@ -103,27 +131,24 @@ public class EventDetailController implements Initializable {
         });
     }
 
+    private void setDisableComponents(boolean disable) {
+        titleField.setDisable(disable);
+        datePicker.setDisable(disable);
+        hourSpinner.setDisable(disable);
+        minuteSpinner.setDisable(disable);
+        timeField.setDisable(disable);
+        placeField.setDisable(disable);
+        descriptionTextArea.setDisable(disable);
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Set all components to be disabled
-        titleField.setDisable(true);
-        datePicker.setDisable(true);
-        hourSpinner.setDisable(true);
-        minuteSpinner.setDisable(true);
-        timeField.setDisable(true);
-        placeField.setDisable(true);
-        descriptionTextArea.setDisable(true);
+        setDisableComponents(true);
         // Initialize spinners
         initSpinners();
     }
 
-    public CalendarActivityObservable getCalendarActivityObservable() {
-        return calendarActivityObservable;
-    }
-
-    public void setCalendarActivityObservable(CalendarActivityObservable calendarActivityObservable) {
-        this.calendarActivityObservable = calendarActivityObservable;
-    }
 
     public TextField getTitleField() {
         return titleField;
