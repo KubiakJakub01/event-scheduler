@@ -1,5 +1,6 @@
 package com.eventscheduler;
 
+import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -85,6 +86,23 @@ public class EventDetailController implements Initializable {
         descriptionTextArea.setText(calendarActivity.getDescription());
     }
 
+    private void initSpinners() {
+        hourSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0, 1));
+        hourSpinner.setEditable(true);
+        hourSpinner.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                hourSpinner.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+        minuteSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 55, 0, 5));
+        minuteSpinner.setEditable(true);
+        minuteSpinner.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                minuteSpinner.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Set all components to be disabled
@@ -95,6 +113,8 @@ public class EventDetailController implements Initializable {
         timeField.setDisable(true);
         placeField.setDisable(true);
         descriptionTextArea.setDisable(true);
+        // Initialize spinners
+        initSpinners();
     }
 
     public CalendarActivityObservable getCalendarActivityObservable() {
