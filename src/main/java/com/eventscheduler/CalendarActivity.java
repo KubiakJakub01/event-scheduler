@@ -8,14 +8,14 @@ public class CalendarActivity implements Activity{
     private String title;
     private ZonedDateTime date;
     private String place;
-    private Double time;
+    private String time;
     private String description;
 
     public CalendarActivity(String title, ZonedDateTime date, Double time, String place, String description) {
         this.title = title;
         this.date = date;
         this.place = place;
-        this.time = time;
+        this.time = time + " h";
         this.description = description;
         // Log the creation of a new event with to string method
         logger.log(System.Logger.Level.INFO, this.toString());
@@ -45,12 +45,12 @@ public class CalendarActivity implements Activity{
         this.place = place;
     }
 
-    public Double getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Double time) {
-        this.time = time;
+    public void setTime(String time) {
+        this.time = time + " h";
     }
 
     public String getDescription() {

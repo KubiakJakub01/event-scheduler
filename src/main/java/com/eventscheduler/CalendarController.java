@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class CalendarController implements Initializable, Observer {
@@ -36,10 +37,10 @@ public class CalendarController implements Initializable, Observer {
     private FlowPane calendar;
 
     @FXML
-    private VBox eventListVbox;
+    private FlowPane eventListPane;
 
     @FXML
-    private VBox dayEventListVbox;
+    private FlowPane dayEventListPane;
 
 
     @Override
@@ -57,8 +58,8 @@ public class CalendarController implements Initializable, Observer {
     public void update(Activity activity) {
         calendarActivityList.add((CalendarActivity) activity);
         logger.log(System.Logger.Level.INFO, "New activity added to calendar");
-        calendar.getChildren().clear();
         drawCalendar();
+        drawEventList();
     }
 
     @FXML
@@ -85,7 +86,7 @@ public class CalendarController implements Initializable, Observer {
             eventController.setCalendarActivityObservable(calendarActivityObservable);
             Scene scene = new Scene(root, 600, 400);
             Stage stage = new Stage();
-            stage.setTitle("New Window");
+            stage.setTitle("Add new event");
             stage.setScene(scene);
             stage.show();
             logger.log(System.Logger.Level.INFO, "Event window opened");
@@ -95,6 +96,7 @@ public class CalendarController implements Initializable, Observer {
     }
 
     private void drawCalendar(){
+        calendar.getChildren().clear();
         year.setText(String.valueOf(dateFocus.getYear()));
         month.setText(String.valueOf(dateFocus.getMonth()));
 
@@ -149,6 +151,30 @@ public class CalendarController implements Initializable, Observer {
                 calendar.getChildren().add(stackPane);
             }
         }
+    }
+
+    private void drawEventList(){
+        eventListPane.getChildren().clear();
+        VBox dayEventList = new VBox();
+        // Sort by date
+        calendarActivityList.sort(Comparator.comparing(CalendarActivity::getDate));
+
+        for (CalendarActivity calendarActivity : calendarActivityList) {
+            StringBuffer sb = new StringBuffer();
+            // Get date in format dd/MM/yyyy HH:mm
+            sb.append(calendarActivity.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+            sb.append(": ");
+            sb.append(calendarActivity.getPlace());
+            sb.append(", ");
+            sb.append(calendarActivity.getTime());
+            Text text = new Text(sb.toString());
+            dayEventList.getChildren().add(text);
+            text.setOnMouseClicked(mouseEvent -> {
+                //On Text clicked
+                System.out.println(text.getText());
+            });
+        }
+        eventListPane.getChildren().add(dayEventList);
     }
 
     private void createCalendarActivity(List<CalendarActivity> calendarActivities, double rectangleHeight, double rectangleWidth, StackPane stackPane) {
