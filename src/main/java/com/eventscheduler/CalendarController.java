@@ -35,6 +35,13 @@ public class CalendarController implements Initializable, Observer {
     @FXML
     private FlowPane calendar;
 
+    @FXML
+    private VBox eventListVbox;
+
+    @FXML
+    private VBox dayEventListVbox;
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         dateFocus = ZonedDateTime.now();
