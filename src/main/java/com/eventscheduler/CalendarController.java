@@ -95,6 +95,25 @@ public class CalendarController implements Initializable, Observer {
         }
     }
 
+    void openDetailEventWindow(CalendarActivity calendarActivity){
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("EventDetailView.fxml"));
+            Parent root = fxmlLoader.load();
+            EventDetailController eventDetailController = fxmlLoader.getController();
+            eventDetailController.fillComponentsWithData(calendarActivity);
+//            eventDetailController.setCalendarActivityObservable(calendarActivityObservable);
+            Scene scene = new Scene(root, 600, 400);
+            Stage stage = new Stage();
+            stage.setTitle("Event detail");
+            stage.setScene(scene);
+            stage.show();
+            logger.log(System.Logger.Level.INFO, "Event detail window opened");
+        } catch (IOException e) {
+            logger.log(System.Logger.Level.ERROR, e.getMessage());
+        }
+    }
+
     private void drawCalendar(){
         calendar.getChildren().clear();
         year.setText(String.valueOf(dateFocus.getYear()));
@@ -171,7 +190,8 @@ public class CalendarController implements Initializable, Observer {
             dayEventList.getChildren().add(text);
             text.setOnMouseClicked(mouseEvent -> {
                 //On Text clicked
-                System.out.println(text.getText());
+                logger.log(System.Logger.Level.INFO, "Event clicked");
+                openDetailEventWindow(calendarActivity);
             });
         }
         eventListPane.getChildren().add(dayEventList);
