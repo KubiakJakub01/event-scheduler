@@ -10,8 +10,11 @@ public class EventModel {
     private MongoCollection<CalendarActivity> events_collection;
 
     public EventModel(MongoDatabase database) {
-        // Create connection to mongoDB
         this.database = database;
         this.events_collection = database.getCollection("events", CalendarActivity.class);
+    }
+
+    public void addEvent(CalendarActivity event) {
+        events_collection.insertOne(event);
     }
 }
