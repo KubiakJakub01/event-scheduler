@@ -22,4 +22,8 @@ public class EventModel {
     public void deleteEvent(CalendarActivity event) {
         events_collection.deleteOne((Bson) event);
     }
+
+    public void updateEvent(CalendarActivity event) {
+        events_collection.updateOne((Bson) event, (Bson) event);
+    }
 }
