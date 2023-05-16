@@ -26,4 +26,12 @@ public class EventModel {
     public void updateEvent(CalendarActivity event) {
         events_collection.updateOne((Bson) event, (Bson) event);
     }
+
+    public void getEvent(CalendarActivity event) {
+        events_collection.find((Bson) event);
+    }
+
+    public void getAllEvents() {
+        events_collection.find();
+    }
 }
