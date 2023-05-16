@@ -3,6 +3,7 @@ package com.eventscheduler.model;
 import com.eventscheduler.CalendarActivity;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.bson.conversions.Bson;
 
 public class EventModel {
 
@@ -16,5 +17,9 @@ public class EventModel {
 
     public void addEvent(CalendarActivity event) {
         events_collection.insertOne(event);
+    }
+
+    public void deleteEvent(CalendarActivity event) {
+        events_collection.deleteOne((Bson) event);
     }
 }
