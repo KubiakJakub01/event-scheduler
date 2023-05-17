@@ -1,4 +1,5 @@
 package com.eventscheduler;
+import com.eventscheduler.model.EventModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +23,7 @@ import java.util.*;
 public class CalendarController implements Initializable, Observer {
     private static final System.Logger logger = System.getLogger(CalendarActivity.class.getName());
 
+    private EventModel eventModel;
     private ZonedDateTime dateFocus;
     private ZonedDateTime today;
     private List<CalendarActivity> calendarActivityList;
@@ -56,6 +58,7 @@ public class CalendarController implements Initializable, Observer {
 
     @Override
     public void update(Activity activity) {
+        eventModel.addEvent((CalendarActivity) activity);
         calendarActivityList.add((CalendarActivity) activity);
         logger.log(System.Logger.Level.INFO, "New activity added to calendar");
         drawCalendar();
@@ -63,21 +66,21 @@ public class CalendarController implements Initializable, Observer {
     }
 
     @FXML
-    void backOneMonth(ActionEvent event) {
+    public void backOneMonth(ActionEvent event) {
         dateFocus = dateFocus.minusMonths(1);
         calendar.getChildren().clear();
         drawCalendar();
     }
 
     @FXML
-    void forwardOneMonth(ActionEvent event) {
+    public void forwardOneMonth(ActionEvent event) {
         dateFocus = dateFocus.plusMonths(1);
         calendar.getChildren().clear();
         drawCalendar();
     }
 
     @FXML
-    void openNewEventWindow(ActionEvent event) {
+    public void openNewEventWindow(ActionEvent event) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("EventForm.fxml"));
@@ -95,7 +98,12 @@ public class CalendarController implements Initializable, Observer {
         }
     }
 
-    void openDetailEventWindow(CalendarActivity calendarActivity){
+    public void loadModel(EventModel eventModel){
+        this.eventModel = eventModel;
+        calendarActivityList = eventModel.getAllEvents();
+    }
+
+    private void openDetailEventWindow(CalendarActivity calendarActivity){
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("EventDetailView.fxml"));
@@ -242,11 +250,18 @@ public class CalendarController implements Initializable, Observer {
     }
 
     private Map<Integer, List<CalendarActivity>> getCalendarActivitiesMonth(ZonedDateTime dateFocus) {
-//        List<CalendarActivity> calendarActivities = new ArrayList<>();
         int year = dateFocus.getYear();
         int month = dateFocus.getMonth().getValue();
 
         return createCalendarMap(calendarActivityList);
+    }
+
+    public EventModel getEventModel() {
+        return eventModel;
+    }
+
+    public void setEventModel(EventModel eventModel) {
+        this.eventModel = eventModel;
     }
 
 }
