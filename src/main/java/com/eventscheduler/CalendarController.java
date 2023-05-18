@@ -17,12 +17,13 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class CalendarController implements Initializable, Observer {
     private static final System.Logger logger = System.getLogger(CalendarActivity.class.getName());
+    private static final int MAX_EVENT_PER_DAY = 3;
+    private static final int LIMIT_UPCOMING_EVENT = 5;
 
     private EventModel eventModel;
     private LocalDateTime dateFocus;
@@ -187,7 +188,7 @@ public class CalendarController implements Initializable, Observer {
         eventListPane.getChildren().clear();
         VBox dayEventList = new VBox();
         // Sort by date
-        calendarActivityList.sort(Comparator.comparing(CalendarActivity::getDate));
+        List<CalendarActivity> calendarActivityList = eventModel.getNearestEvents(LIMIT_UPCOMING_EVENT);
 
         for (CalendarActivity calendarActivity : calendarActivityList) {
             StringBuffer sb = new StringBuffer();
