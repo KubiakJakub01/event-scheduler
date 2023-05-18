@@ -11,10 +11,7 @@ import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
@@ -37,11 +34,13 @@ public class ConnectionDB {
         Properties properties = readPropertiesFile(propertiesPath);
         logger.log(System.Logger.Level.INFO, "Properties file read " + properties.getProperty("mongodb.uri"));
         ConnectionString connectionString = new ConnectionString(properties.getProperty("mongodb.uri"));
-        CodecRegistry pojoCodecRegistry = fromProviders(PojoCodecProvider.builder().automatic(true).build());
-        CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), pojoCodecRegistry);
+        CodecRegistry pojoCodecRegistry = fromRegistries(
+                MongoClientSettings.getDefaultCodecRegistry(),
+                fromProviders(PojoCodecProvider.builder().register(CalendarActivity.class).build())
+        );
         MongoClientSettings clientSettings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
-                .codecRegistry(codecRegistry)
+                .codecRegistry(pojoCodecRegistry)
                 .build();
         this.mongoClient = MongoClients.create(clientSettings);
         logger.log(System.Logger.Level.INFO, "Connection to database created");
@@ -49,10 +48,7 @@ public class ConnectionDB {
         logger.log(System.Logger.Level.INFO, "Database " + databaseName + " selected");
         this.events = db.getCollection(documentName, CalendarActivity.class);
         logger.log(System.Logger.Level.INFO, "Collection " + documentName + " selected");
-//        List<CalendarActivity> eventsList = this.events.find().into(new ArrayList<>());
-//        logger.log(System.Logger.Level.INFO, "Events list size: " + eventsList.size());
     }
-
 
     private Properties readPropertiesFile(String propertiesPath) {
         Properties dbProps = new Properties();
