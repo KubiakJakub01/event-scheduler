@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ResourceBundle;
 
@@ -49,15 +50,15 @@ public class EventController implements Initializable {
         String title = titleField.getText();
         int hour = (int) hourSpinner.getValue();
         int minute = (int) minuteSpinner.getValue();
-        ZonedDateTime date = ZonedDateTime.of(datePicker.getValue().getYear(), datePicker.getValue().getMonthValue(), datePicker.getValue().getDayOfMonth(), hour, minute, 0, 0, ZonedDateTime.now().getZone());
-        double time = Double.parseDouble(timeField.getText());
+        LocalDateTime date = LocalDateTime.of(datePicker.getValue().getYear(), datePicker.getValue().getMonth(), datePicker.getValue().getDayOfMonth(), hour, minute);
+        Double duration = Double.parseDouble(timeField.getText());
         String place = placeField.getText();
         String description = descriptionTextArea.getText();
-        submitNewEvent(title, date, time, place, description);
+        submitNewEvent(title, date, duration, place, description);
     }
 
-    private void submitNewEvent(String title, ZonedDateTime date, double time, String place, String description) {
-        CalendarActivity newEvent = new CalendarActivity(title, date, time, place, description);
+    private void submitNewEvent(String title, LocalDateTime date, Double duration, String place, String description) {
+        CalendarActivity newEvent = new CalendarActivity(title, date, duration, place, description);
         calendarActivityObservable.notifyObservers(newEvent);
         logger.log(System.Logger.Level.INFO, "New event submitted");
         closeEventWindow();
@@ -90,12 +91,19 @@ public class EventController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Initialize spinners
         initSpinners();
+        // Allow only numbers in time field
+        timeField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                timeField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
         // Disable submit button until all fields are filled
         BooleanBinding booleanBinding = titleField.textProperty().isEmpty()
                 .or(datePicker.valueProperty().isNull())
                 .or(timeField.textProperty().isEmpty())
                 .or(placeField.textProperty().isEmpty());
         handleSubmitButton.disableProperty().bind(booleanBinding);
+
     }
 
     public void setCalendarActivityObservable(CalendarActivityObservable calendarActivityObservable) {
