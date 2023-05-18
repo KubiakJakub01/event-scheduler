@@ -1,21 +1,28 @@
 package com.eventscheduler;
 
-import java.time.ZonedDateTime;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.types.ObjectId;
+
+import java.time.LocalDateTime;
 
 public class CalendarActivity implements Activity{
     private static final System.Logger logger = System.getLogger(CalendarActivity.class.getName());
 
+    @BsonId
+    private ObjectId id;
     private String title;
-    private ZonedDateTime date;
+    private LocalDateTime date;
+    private Double duration;
     private String place;
-    private String time;
     private String description;
 
-    public CalendarActivity(String title, ZonedDateTime date, Double time, String place, String description) {
+    public CalendarActivity() {
+    }
+    public CalendarActivity(String title, LocalDateTime date, Double duration, String place, String description) {
         this.title = title;
         this.date = date;
+        this.duration = duration;
         this.place = place;
-        this.time = time + " h";
         this.description = description;
         // Log the creation of a new event with to string method
         logger.log(System.Logger.Level.INFO, this.toString());
@@ -29,12 +36,20 @@ public class CalendarActivity implements Activity{
         this.title = title;
     }
 
-    public ZonedDateTime getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(ZonedDateTime date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+
+    public Double getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Double duration) {
+        this.duration = duration;
     }
 
     public String getPlace() {
@@ -43,14 +58,6 @@ public class CalendarActivity implements Activity{
 
     public void setPlace(String place) {
         this.place = place;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time + " h";
     }
 
     public String getDescription() {
@@ -71,8 +78,8 @@ public class CalendarActivity implements Activity{
         sb.append(date);
         sb.append("', place='");
         sb.append(place);
-        sb.append("', time='");
-        sb.append(time);
+        sb.append("', duration='");
+        sb.append(duration);
         sb.append("', description='");
         sb.append(description);
         sb.append("'}");
