@@ -109,7 +109,7 @@ public class EventDetailController implements Initializable {
         datePicker.setValue(calendarActivity.getDate().toLocalDate());
         hourSpinner.getValueFactory().setValue(calendarActivity.getDate().getHour());
         minuteSpinner.getValueFactory().setValue(calendarActivity.getDate().getMinute());
-        timeField.setText(String.valueOf(calendarActivity.getTime()));
+        timeField.setText(String.valueOf(calendarActivity.getDuration()));
         placeField.setText(calendarActivity.getPlace());
         descriptionTextArea.setText(calendarActivity.getDescription());
     }
