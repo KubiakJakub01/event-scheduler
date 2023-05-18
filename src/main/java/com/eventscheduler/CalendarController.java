@@ -193,7 +193,7 @@ public class CalendarController implements Initializable, Observer {
             sb.append(": ");
             sb.append(calendarActivity.getPlace());
             sb.append(", ");
-            sb.append(calendarActivity.getTime());
+            sb.append(calendarActivity.getDuration());
             Text text = new Text(sb.toString());
             dayEventList.getChildren().add(text);
             text.setOnMouseClicked(mouseEvent -> {
