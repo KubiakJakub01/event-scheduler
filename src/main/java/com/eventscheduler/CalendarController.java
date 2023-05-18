@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -24,8 +25,8 @@ public class CalendarController implements Initializable, Observer {
     private static final System.Logger logger = System.getLogger(CalendarActivity.class.getName());
 
     private EventModel eventModel;
-    private ZonedDateTime dateFocus;
-    private ZonedDateTime today;
+    private LocalDateTime dateFocus;
+    private LocalDateTime today;
     private List<CalendarActivity> calendarActivityList;
     private CalendarActivityObservable calendarActivityObservable;
 
@@ -47,13 +48,10 @@ public class CalendarController implements Initializable, Observer {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        dateFocus = ZonedDateTime.now();
-        today = ZonedDateTime.now();
+        dateFocus = LocalDateTime.now();
+        today = LocalDateTime.now();
         this.calendarActivityObservable = new CalendarActivityObservable();
         this.calendarActivityObservable.addObserver(this);
-        this.calendarActivityList = new ArrayList<>();
-
-        drawCalendar();
     }
 
     @Override
@@ -61,8 +59,7 @@ public class CalendarController implements Initializable, Observer {
         eventModel.addEvent((CalendarActivity) activity);
         calendarActivityList.add((CalendarActivity) activity);
         logger.log(System.Logger.Level.INFO, "New activity added to calendar");
-        drawCalendar();
-        drawEventList();
+        drawCalendarView();
     }
 
     @FXML
@@ -101,6 +98,12 @@ public class CalendarController implements Initializable, Observer {
     public void loadModel(EventModel eventModel){
         this.eventModel = eventModel;
         calendarActivityList = eventModel.getAllEvents();
+        drawCalendarView();
+    }
+
+    private void drawCalendarView(){
+        drawCalendar();
+        drawEventList();
     }
 
     private void openDetailEventWindow(CalendarActivity calendarActivity){
@@ -141,7 +144,7 @@ public class CalendarController implements Initializable, Observer {
         if(dateFocus.getYear() % 4 != 0 && monthMaxDate == 29){
             monthMaxDate = 28;
         }
-        int dateOffset = ZonedDateTime.of(dateFocus.getYear(), dateFocus.getMonthValue(), 1,0,0,0,0,dateFocus.getZone()).getDayOfWeek().getValue();
+        int dateOffset = LocalDateTime.of(dateFocus.getYear(), dateFocus.getMonthValue(), 1,0,0,0,0).getDayOfWeek().getValue();
 
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 7; j++) {
@@ -249,11 +252,14 @@ public class CalendarController implements Initializable, Observer {
         return  calendarActivityMap;
     }
 
-    private Map<Integer, List<CalendarActivity>> getCalendarActivitiesMonth(ZonedDateTime dateFocus) {
+    private Map<Integer, List<CalendarActivity>> getCalendarActivitiesMonth(LocalDateTime dateFocus) {
         int year = dateFocus.getYear();
         int month = dateFocus.getMonth().getValue();
 
-        return createCalendarMap(calendarActivityList);
+        List<CalendarActivity> monthCalendarActivityList = new ArrayList<>();
+        monthCalendarActivityList = eventModel.getEventsByMonth(year, month);
+
+        return createCalendarMap(monthCalendarActivityList);
     }
 
     public EventModel getEventModel() {
