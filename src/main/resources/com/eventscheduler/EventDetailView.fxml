@@ -56,9 +56,18 @@
    <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
       <children>
       
-          <Button fx:id="okButton" onAction="#handleOK" text="OK" />
-         <Button fx:id="updateButton" mnemonicParsing="false" onAction="#handleUpdate" text="Update" />
-         <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDelete" text="Delete" />
+          <Button fx:id="okButton" onAction="#handleOK" text="OK">
+            <font>
+               <Font name="Comic Sans MS" size="14.0" />
+            </font></Button>
+         <Button fx:id="updateButton" mnemonicParsing="false" onAction="#handleUpdate" text="Update">
+            <font>
+               <Font name="Comic Sans MS" size="14.0" />
+            </font></Button>
+         <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDelete" text="Delete" textFill="#c32323">
+            <font>
+               <Font name="Comic Sans MS" size="14.0" />
+            </font></Button>
       </children>
       <GridPane.margin>
          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
