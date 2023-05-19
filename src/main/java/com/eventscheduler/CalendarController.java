@@ -230,7 +230,12 @@ public class CalendarController implements Initializable, Observer {
                 });
                 break;
             }
-            Text text = new Text(calendarActivities.get(k).getPlace() + ", " + calendarActivities.get(k).getDate().toLocalTime());
+            StringBuffer sb = new StringBuffer();
+            // Take maximal 8 characters for the place
+            sb.append(calendarActivities.get(k).getPlace().substring(0, Math.min(calendarActivities.get(k).getPlace().length(), 8)));
+            sb.append(", ");
+            sb.append(calendarActivities.get(k).getDate().toLocalTime());
+            Text text = new Text(sb.toString());
             calendarActivityBox.getChildren().add(text);
             int finalK = k;
             text.setOnMouseClicked(mouseEvent -> {
