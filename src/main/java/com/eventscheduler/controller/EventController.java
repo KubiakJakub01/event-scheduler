@@ -16,7 +16,6 @@ public class EventController implements Initializable {
 
     private EventObservable eventObservable;
 
-
     @FXML
     private TextField titleField;
 
@@ -55,7 +54,7 @@ public class EventController implements Initializable {
 
     private void submitNewEvent(String title, LocalDateTime date, Double duration, String place, String description) {
         EventModel newEvent = new EventModel(title, date, duration, place, description);
-        eventObservable.notifyObservers(newEvent);
+        eventObservable.addEvent(newEvent);
         logger.log(System.Logger.Level.INFO, "New event submitted");
         closeEventWindow();
     }
@@ -87,12 +86,12 @@ public class EventController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Initialize spinners
         initSpinners();
-        // Allow only numbers in time field
         timeField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                timeField.setText(newValue.replaceAll("[^\\d]", ""));
+            if (!newValue.matches("\\d{0,2}([\\.]\\d{0,1})?")) {
+                timeField.setText(oldValue);
             }
         });
+
         // Disable submit button until all fields are filled
         BooleanBinding booleanBinding = titleField.textProperty().isEmpty()
                 .or(datePicker.valueProperty().isNull())
@@ -102,7 +101,7 @@ public class EventController implements Initializable {
 
     }
 
-    public void setCalendarActivityObservable(EventObservable eventObservable) {
+    public void setEventObservable(EventObservable eventObservable) {
         this.eventObservable = eventObservable;
     }
 }

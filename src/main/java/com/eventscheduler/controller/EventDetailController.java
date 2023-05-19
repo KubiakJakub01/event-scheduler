@@ -1,6 +1,5 @@
 package com.eventscheduler.controller;
 
-import com.eventscheduler.controller.EventController;
 import com.eventscheduler.model.EventModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 public class EventDetailController implements Initializable {
@@ -45,15 +45,32 @@ public class EventDetailController implements Initializable {
     private Button deleteButton;
 
     private boolean isUpdate = false;
+    private EventObservable eventObservable;
+    private EventModel eventModel;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Set all components to be disabled
+        setDisableComponents(true);
+        // Initialize spinners
+        initSpinners();
+        setTimeField();
+    }
 
     @FXML
     private void handleOK(ActionEvent event) {
         logger.log(System.Logger.Level.INFO, "Ok button pressed");
         // Close the window
         if (isUpdate) {
-            // TODO: Update the event
-            updateComponents();
-            disableUpdateMode();
+            EventModel updatedEventModel = createEventModelFromComponents();
+            if (updatedEventModel.equals(eventModel)) {
+                logger.log(System.Logger.Level.INFO, "No changes detected");
+                cancelUpdate();
+            }
+            else {
+                updateEvent(updatedEventModel);
+                disableUpdateMode();
+            }
         }
         else {
             closeDetailEventWindow();
@@ -65,6 +82,7 @@ public class EventDetailController implements Initializable {
         logger.log(System.Logger.Level.INFO, "Update button pressed");
         if (isUpdate) {
             disableUpdateMode();
+            cancelUpdate();
         }
         else {
             setDisableComponents(false);
@@ -78,19 +96,25 @@ public class EventDetailController implements Initializable {
         logger.log(System.Logger.Level.INFO, "Delete button pressed");
     }
 
-    private void updateComponents() {
-        logger.log(System.Logger.Level.INFO, "Update components");
-//        titleField.setText(calendarActivityObservable.getTitle());
-//        datePicker.setValue(calendarActivityObservable.getDate().toLocalDate());
-//        hourSpinner.getValueFactory().setValue(calendarActivityObservable.getDate().getHour());
-//        minuteSpinner.getValueFactory().setValue(calendarActivityObservable.getDate().getMinute());
-//        timeField.setText(String.valueOf(calendarActivityObservable.getTime()));
-//        placeField.setText(calendarActivityObservable.getPlace());
-//        descriptionTextArea.setText(calendarActivityObservable.getDescription());
+    private EventModel createEventModelFromComponents(){
+        String title = titleField.getText();
+        int hour = (int) hourSpinner.getValue();
+        int minute = (int) minuteSpinner.getValue();
+        LocalDateTime date = LocalDateTime.of(datePicker.getValue().getYear(), datePicker.getValue().getMonth(), datePicker.getValue().getDayOfMonth(), hour, minute);
+        Double duration = Double.parseDouble(timeField.getText());
+        String place = placeField.getText();
+        String description = descriptionTextArea.getText();
+        return new EventModel(title, date, duration, place, description);
+    }
+
+    private void updateEvent(EventModel updatedEventModel) {
+        logger.log(System.Logger.Level.INFO, "Send request to update event");
+        eventObservable.updateEvent(eventModel, updatedEventModel);
     }
 
     private void cancelUpdate() {
         logger.log(System.Logger.Level.INFO, "Cancel update");
+        fillComponentsWithData(eventModel);
     }
 
     private void disableUpdateMode(){
@@ -106,6 +130,7 @@ public class EventDetailController implements Initializable {
     }
 
     public void fillComponentsWithData(EventModel eventModel) {
+        this.eventModel = eventModel;
         titleField.setText(eventModel.getTitle());
         datePicker.setValue(eventModel.getDate().toLocalDate());
         hourSpinner.getValueFactory().setValue(eventModel.getDate().getHour());
@@ -142,14 +167,17 @@ public class EventDetailController implements Initializable {
         descriptionTextArea.setDisable(disable);
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Set all components to be disabled
-        setDisableComponents(true);
-        // Initialize spinners
-        initSpinners();
+    private void setTimeField(){
+        timeField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d{0,2}([\\.]\\d{0,1})?")) {
+                timeField.setText(oldValue);
+            }
+        });
     }
 
+    public void setEventObservable(EventObservable eventObservable) {
+        this.eventObservable = eventObservable;
+    }
 
     public TextField getTitleField() {
         return titleField;
