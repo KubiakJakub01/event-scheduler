@@ -47,7 +47,7 @@
          <Font name="Comic Sans MS" size="18.0" />
       </font>
    </Label>
-   <FlowPane fx:id="eventListPane" layoutX="763.0" layoutY="117.0" prefHeight="498.0" prefWidth="215.0" />
    <FlowPane fx:id="dayEventListPane" layoutX="22.0" layoutY="615.0" prefHeight="133.0" prefWidth="716.0" />
+   <FlowPane fx:id="eventListPane" layoutX="774.0" layoutY="122.0" prefHeight="498.0" prefWidth="212.0" />
 
 </AnchorPane>
