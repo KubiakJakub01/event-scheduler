@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -186,6 +187,7 @@ public class CalendarController implements Initializable, Observer {
 
     private void drawEventList(){
         eventListPane.getChildren().clear();
+        ScrollPane scrollPane = new ScrollPane();
         VBox dayEventList = new VBox();
         // Sort by date
         List<CalendarActivity> calendarActivityList = eventModel.getNearestEvents(LIMIT_UPCOMING_EVENT);
@@ -200,13 +202,19 @@ public class CalendarController implements Initializable, Observer {
             sb.append(calendarActivity.getDuration());
             Text text = new Text(sb.toString());
             dayEventList.getChildren().add(text);
+            // Add break line
+            dayEventList.getChildren().add(new Text("\n"));
             text.setOnMouseClicked(mouseEvent -> {
                 //On Text clicked
                 logger.log(System.Logger.Level.INFO, "Event clicked");
                 openDetailEventWindow(calendarActivity);
             });
         }
-        eventListPane.getChildren().add(dayEventList);
+        // Add scroll bar
+        scrollPane.setPrefHeight(eventListPane.getPrefHeight());
+        scrollPane.setPrefWidth(eventListPane.getPrefWidth());
+        scrollPane.setContent(dayEventList);
+        eventListPane.getChildren().add(scrollPane);
     }
 
     private void createCalendarActivity(List<CalendarActivity> calendarActivities, double rectangleHeight, double rectangleWidth, StackPane stackPane) {
@@ -216,16 +224,19 @@ public class CalendarController implements Initializable, Observer {
                 Text moreActivities = new Text("...");
                 calendarActivityBox.getChildren().add(moreActivities);
                 moreActivities.setOnMouseClicked(mouseEvent -> {
-                    //On ... click print all activities for given date
-                    System.out.println(calendarActivities);
+                    //On Text clicked
+                    logger.log(System.Logger.Level.INFO, "Event clicked");
+                    openDetailEventWindow(calendarActivities.get(0));
                 });
                 break;
             }
             Text text = new Text(calendarActivities.get(k).getPlace() + ", " + calendarActivities.get(k).getDate().toLocalTime());
             calendarActivityBox.getChildren().add(text);
+            int finalK = k;
             text.setOnMouseClicked(mouseEvent -> {
                 //On Text clicked
-                System.out.println(text.getText());
+                logger.log(System.Logger.Level.INFO, "Event clicked");
+                openDetailEventWindow(calendarActivities.get(finalK));
             });
         }
         calendarActivityBox.setTranslateY((rectangleHeight / 2) * 0.20);
