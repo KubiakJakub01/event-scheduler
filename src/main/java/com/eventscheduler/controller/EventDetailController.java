@@ -1,6 +1,7 @@
-package com.eventscheduler;
+package com.eventscheduler.controller;
 
-import javafx.beans.binding.BooleanBinding;
+import com.eventscheduler.controller.EventController;
+import com.eventscheduler.model.EventModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -104,14 +105,14 @@ public class EventDetailController implements Initializable {
         logger.log(System.Logger.Level.INFO, "Detail event window closed");
     }
 
-    public void fillComponentsWithData(CalendarActivity calendarActivity) {
-        titleField.setText(calendarActivity.getTitle());
-        datePicker.setValue(calendarActivity.getDate().toLocalDate());
-        hourSpinner.getValueFactory().setValue(calendarActivity.getDate().getHour());
-        minuteSpinner.getValueFactory().setValue(calendarActivity.getDate().getMinute());
-        timeField.setText(String.valueOf(calendarActivity.getDuration()));
-        placeField.setText(calendarActivity.getPlace());
-        descriptionTextArea.setText(calendarActivity.getDescription());
+    public void fillComponentsWithData(EventModel eventModel) {
+        titleField.setText(eventModel.getTitle());
+        datePicker.setValue(eventModel.getDate().toLocalDate());
+        hourSpinner.getValueFactory().setValue(eventModel.getDate().getHour());
+        minuteSpinner.getValueFactory().setValue(eventModel.getDate().getMinute());
+        timeField.setText(String.valueOf(eventModel.getDuration()));
+        placeField.setText(eventModel.getPlace());
+        descriptionTextArea.setText(eventModel.getDescription());
     }
 
     private void initSpinners() {

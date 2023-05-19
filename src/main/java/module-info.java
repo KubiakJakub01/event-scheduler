@@ -10,4 +10,6 @@ module com.example.eventscheduler {
     exports com.eventscheduler;
     exports com.eventscheduler.model;
     opens com.eventscheduler.model to javafx.fxml;
+    exports com.eventscheduler.controller;
+    opens com.eventscheduler.controller to javafx.fxml;
 }

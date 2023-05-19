@@ -1,21 +1,21 @@
 package com.eventscheduler;
 
+import com.eventscheduler.controller.CalendarController;
 import com.eventscheduler.model.ConnectionDB;
-import com.eventscheduler.model.EventModel;
+import com.eventscheduler.model.EventManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Main extends Application {
 
     private CalendarController calendarController;
     private ConnectionDB connectionDB;
-    private EventModel eventModel;
+    private EventManager eventManager;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -24,7 +24,7 @@ public class Main extends Application {
         fxmlLoader.setLocation(getClass().getResource("Calendar.fxml"));
         Parent root = fxmlLoader.load();
         calendarController = fxmlLoader.getController();
-        calendarController.loadModel(eventModel);
+        calendarController.loadModel(eventManager);
         Scene scene = new Scene(root, 1024, 768);
         stage.setTitle("Event scheduler");
         stage.setScene(scene);
@@ -38,7 +38,7 @@ public class Main extends Application {
 
     public void initDBConnection() {
         connectionDB = new ConnectionDB();
-        eventModel = new EventModel(connectionDB.getEvents());
+        eventManager = new EventManager(connectionDB.getEvents());
     }
 
     public static void main(String[] args) {

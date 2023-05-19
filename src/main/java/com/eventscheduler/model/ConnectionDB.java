@@ -1,7 +1,6 @@
 package com.eventscheduler.model;
 
 import com.mongodb.ConnectionString;
-import com.eventscheduler.CalendarActivity;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -22,7 +21,7 @@ public class ConnectionDB {
 
     private MongoClient mongoClient;
     private MongoDatabase db;
-    private MongoCollection<CalendarActivity> events;
+    private MongoCollection<EventModel> events;
     private static final String propertiesPath = "src/main/resources/db.properties";
     private static final String databaseName = "eventSchedulerDB";
     private static final String documentName = "events";
@@ -36,7 +35,7 @@ public class ConnectionDB {
         ConnectionString connectionString = new ConnectionString(properties.getProperty("mongodb.uri"));
         CodecRegistry pojoCodecRegistry = fromRegistries(
                 MongoClientSettings.getDefaultCodecRegistry(),
-                fromProviders(PojoCodecProvider.builder().register(CalendarActivity.class).build())
+                fromProviders(PojoCodecProvider.builder().register(EventModel.class).build())
         );
         MongoClientSettings clientSettings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
@@ -46,7 +45,7 @@ public class ConnectionDB {
         logger.log(System.Logger.Level.INFO, "Connection to database created");
         this.db = mongoClient.getDatabase(databaseName);
         logger.log(System.Logger.Level.INFO, "Database " + databaseName + " selected");
-        this.events = db.getCollection(documentName, CalendarActivity.class);
+        this.events = db.getCollection(documentName, EventModel.class);
         logger.log(System.Logger.Level.INFO, "Collection " + documentName + " selected");
     }
 
@@ -65,7 +64,7 @@ public class ConnectionDB {
         return db;
     }
 
-    public MongoCollection<CalendarActivity> getEvents() {
+    public MongoCollection<EventModel> getEvents() {
         return events;
     }
 }

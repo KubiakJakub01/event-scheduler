@@ -1,9 +1,11 @@
-package com.eventscheduler;
+package com.eventscheduler.controller;
+
+import com.eventscheduler.model.Model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CalendarActivityObservable implements Observable {
+public class EventObservable implements Observable {
     private List<Observer> observers = new ArrayList<>();
 
     @Override
@@ -17,9 +19,9 @@ public class CalendarActivityObservable implements Observable {
     }
 
     @Override
-    public void notifyObservers(Activity activity) {
+    public void notifyObservers(Model model) {
         for (Observer observer : observers) {
-            observer.update(activity);
+            observer.update(model);
         }
     }
 }

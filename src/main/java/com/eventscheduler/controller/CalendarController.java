@@ -1,5 +1,7 @@
-package com.eventscheduler;
+package com.eventscheduler.controller;
+import com.eventscheduler.model.EventManager;
 import com.eventscheduler.model.EventModel;
+import com.eventscheduler.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,15 +24,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class CalendarController implements Initializable, Observer {
-    private static final System.Logger logger = System.getLogger(CalendarActivity.class.getName());
+    private static final System.Logger logger = System.getLogger(EventModel.class.getName());
     private static final int MAX_EVENT_PER_DAY = 3;
     private static final int LIMIT_UPCOMING_EVENT = 5;
 
-    private EventModel eventModel;
+    private EventManager eventManager;
     private LocalDateTime dateFocus;
     private LocalDateTime today;
-    private List<CalendarActivity> calendarActivityList;
-    private CalendarActivityObservable calendarActivityObservable;
+    private List<EventModel> eventModelList;
+    private EventObservable eventObservable;
 
     @FXML
     private Text year;
@@ -52,15 +54,15 @@ public class CalendarController implements Initializable, Observer {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         dateFocus = LocalDateTime.now();
         today = LocalDateTime.now();
-        this.calendarActivityObservable = new CalendarActivityObservable();
-        this.calendarActivityObservable.addObserver(this);
+        this.eventObservable = new EventObservable();
+        this.eventObservable.addObserver(this);
     }
 
     @Override
-    public void update(Activity activity) {
-        eventModel.addEvent((CalendarActivity) activity);
-        calendarActivityList.add((CalendarActivity) activity);
-        logger.log(System.Logger.Level.INFO, "New activity added to calendar");
+    public void update(Model model) {
+        eventManager.addElement((EventModel) model);
+        eventModelList.add((EventModel) model);
+        logger.log(System.Logger.Level.INFO, "New model added to calendar");
         drawCalendarView();
     }
 
@@ -82,10 +84,10 @@ public class CalendarController implements Initializable, Observer {
     public void openNewEventWindow(ActionEvent event) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("EventForm.fxml"));
+            fxmlLoader.setLocation(getClass().getResource("/com/eventscheduler/EventForm.fxml"));
             Parent root = fxmlLoader.load();
             EventController eventController = fxmlLoader.getController();
-            eventController.setCalendarActivityObservable(calendarActivityObservable);
+            eventController.setCalendarActivityObservable(eventObservable);
             Scene scene = new Scene(root, 600, 400);
             Stage stage = new Stage();
             stage.setTitle("Add new event");
@@ -97,9 +99,9 @@ public class CalendarController implements Initializable, Observer {
         }
     }
 
-    public void loadModel(EventModel eventModel){
-        this.eventModel = eventModel;
-        calendarActivityList = eventModel.getAllEvents();
+    public void loadModel(EventManager eventManager){
+        this.eventManager = eventManager;
+        eventModelList = eventManager.getAllElements();
         drawCalendarView();
     }
 
@@ -108,14 +110,14 @@ public class CalendarController implements Initializable, Observer {
         drawUpcomingEvents();
     }
 
-    private void openDetailEventWindow(CalendarActivity calendarActivity){
+    private void openDetailEventWindow(EventModel eventModel){
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("EventDetailView.fxml"));
+            fxmlLoader.setLocation(getClass().getResource("/com/eventscheduler/EventDetailView.fxml"));
             Parent root = fxmlLoader.load();
             EventDetailController eventDetailController = fxmlLoader.getController();
-            eventDetailController.fillComponentsWithData(calendarActivity);
-//            eventDetailController.setCalendarActivityObservable(calendarActivityObservable);
+            eventDetailController.fillComponentsWithData(eventModel);
+//            eventDetailController.setCalendarActivityObservable(eventObservable);
             Scene scene = new Scene(root, 600, 400);
             Stage stage = new Stage();
             stage.setTitle("Event detail");
@@ -139,7 +141,7 @@ public class CalendarController implements Initializable, Observer {
         double spacingV = calendar.getVgap();
 
         //List of activities for a given month
-        Map<Integer, List<CalendarActivity>> calendarActivityMap = getCalendarActivitiesMonth(dateFocus);
+        Map<Integer, List<EventModel>> calendarActivityMap = getCalendarActivitiesMonth(dateFocus);
 
         int monthMaxDate = dateFocus.getMonth().maxLength();
         //Check for leap year
@@ -171,7 +173,7 @@ public class CalendarController implements Initializable, Observer {
                         date.setTranslateY(textTranslationY);
                         stackPane.getChildren().add(date);
 
-                        List<CalendarActivity> calendarActivities = calendarActivityMap.get(currentDate);
+                        List<EventModel> calendarActivities = calendarActivityMap.get(currentDate);
                         if(calendarActivities != null){
                             createCalendarActivity(calendarActivities, rectangleHeight, rectangleWidth, stackPane);
                         }
@@ -185,7 +187,7 @@ public class CalendarController implements Initializable, Observer {
         }
     }
 
-    private void createCalendarActivity(List<CalendarActivity> calendarActivities, double rectangleHeight, double rectangleWidth, StackPane stackPane) {
+    private void createCalendarActivity(List<EventModel> calendarActivities, double rectangleHeight, double rectangleWidth, StackPane stackPane) {
         VBox calendarActivityBox = new VBox();
         for (int k = 0; k < calendarActivities.size(); k++) {
             if(k >= 2) {
@@ -219,17 +221,17 @@ public class CalendarController implements Initializable, Observer {
         stackPane.getChildren().add(calendarActivityBox);
     }
 
-    private Map<Integer, List<CalendarActivity>> createCalendarMap(List<CalendarActivity> calendarActivities) {
-        Map<Integer, List<CalendarActivity>> calendarActivityMap = new HashMap<>();
+    private Map<Integer, List<EventModel>> createCalendarMap(List<EventModel> calendarActivities) {
+        Map<Integer, List<EventModel>> calendarActivityMap = new HashMap<>();
 
-        for (CalendarActivity activity: calendarActivities) {
+        for (EventModel activity: calendarActivities) {
             int activityDate = activity.getDate().getDayOfMonth();
             if(!calendarActivityMap.containsKey(activityDate)){
                 calendarActivityMap.put(activityDate, List.of(activity));
             } else {
-                List<CalendarActivity> OldListByDate = calendarActivityMap.get(activityDate);
+                List<EventModel> OldListByDate = calendarActivityMap.get(activityDate);
 
-                List<CalendarActivity> newList = new ArrayList<>(OldListByDate);
+                List<EventModel> newList = new ArrayList<>(OldListByDate);
                 newList.add(activity);
                 calendarActivityMap.put(activityDate, newList);
             }
@@ -237,13 +239,13 @@ public class CalendarController implements Initializable, Observer {
         return  calendarActivityMap;
     }
 
-    private Map<Integer, List<CalendarActivity>> getCalendarActivitiesMonth(LocalDateTime dateFocus) {
+    private Map<Integer, List<EventModel>> getCalendarActivitiesMonth(LocalDateTime dateFocus) {
         int year = dateFocus.getYear();
         int month = dateFocus.getMonth().getValue();
 
-        List<CalendarActivity> monthCalendarActivityList = eventModel.getEventsByMonth(year, month);
+        List<EventModel> monthEventModelList = eventManager.getEventsByMonth(year, month);
 
-        return createCalendarMap(monthCalendarActivityList);
+        return createCalendarMap(monthEventModelList);
     }
 
     private void drawUpcomingEvents(){
@@ -251,16 +253,16 @@ public class CalendarController implements Initializable, Observer {
         ScrollPane scrollPane = new ScrollPane();
         VBox dayEventList = new VBox();
         // Sort by date
-        List<CalendarActivity> calendarActivityList = eventModel.getNearestEvents(LIMIT_UPCOMING_EVENT);
+        List<EventModel> eventModelList = eventManager.getNearestEvents(LIMIT_UPCOMING_EVENT);
 
-        for (CalendarActivity calendarActivity : calendarActivityList) {
+        for (EventModel eventModel : eventModelList) {
             StringBuffer sb = new StringBuffer();
             // Get date in format dd/MM/yyyy HH:mm
-            sb.append(calendarActivity.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+            sb.append(eventModel.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
             sb.append(": ");
-            sb.append(calendarActivity.getPlace());
+            sb.append(eventModel.getPlace());
             sb.append(", ");
-            sb.append(calendarActivity.getDuration());
+            sb.append(eventModel.getDuration());
             Text text = new Text(sb.toString());
             dayEventList.getChildren().add(text);
             // Add break line
@@ -268,7 +270,7 @@ public class CalendarController implements Initializable, Observer {
             text.setOnMouseClicked(mouseEvent -> {
                 //On Text clicked
                 logger.log(System.Logger.Level.INFO, "Event clicked");
-                openDetailEventWindow(calendarActivity);
+                openDetailEventWindow(eventModel);
             });
         }
         // Add scroll bar
@@ -283,16 +285,16 @@ public class CalendarController implements Initializable, Observer {
         ScrollPane scrollPane = new ScrollPane();
         VBox dayEventList = new VBox();
         // Sort by date
-        List<CalendarActivity> calendarActivityList = eventModel.getEventsByDay(dateFocus.getYear(), dateFocus.getMonth().getValue(), dateFocus.getDayOfMonth());
+        List<EventModel> eventModelList = eventManager.getEventsByDay(dateFocus.getYear(), dateFocus.getMonth().getValue(), dateFocus.getDayOfMonth());
 
-        for (CalendarActivity calendarActivity : calendarActivityList) {
+        for (EventModel eventModel : eventModelList) {
             StringBuffer sb = new StringBuffer();
             // Get date in format dd/MM/yyyy HH:mm
-            sb.append(calendarActivity.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+            sb.append(eventModel.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
             sb.append(": ");
-            sb.append(calendarActivity.getPlace());
+            sb.append(eventModel.getPlace());
             sb.append(", ");
-            sb.append(calendarActivity.getDuration());
+            sb.append(eventModel.getDuration());
             Text text = new Text(sb.toString());
             dayEventList.getChildren().add(text);
             // Add break line
@@ -300,7 +302,7 @@ public class CalendarController implements Initializable, Observer {
             text.setOnMouseClicked(mouseEvent -> {
                 //On Text clicked
                 logger.log(System.Logger.Level.INFO, "Event clicked");
-                openDetailEventWindow(calendarActivity);
+                openDetailEventWindow(eventModel);
             });
         }
         // Add scroll bar
@@ -310,12 +312,12 @@ public class CalendarController implements Initializable, Observer {
         dayEventListPane.getChildren().add(scrollPane);
     }
 
-    public EventModel getEventModel() {
-        return eventModel;
+    public EventManager getEventModel() {
+        return eventManager;
     }
 
-    public void setEventModel(EventModel eventModel) {
-        this.eventModel = eventModel;
+    public void setEventModel(EventManager eventManager) {
+        this.eventManager = eventManager;
     }
 
 }
