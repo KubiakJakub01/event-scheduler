@@ -1,6 +1,7 @@
-package com.eventscheduler;
+package com.eventscheduler.controller;
 import com.eventscheduler.model.EventManager;
 import com.eventscheduler.model.EventModel;
+import com.eventscheduler.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,7 +32,7 @@ public class CalendarController implements Initializable, Observer {
     private LocalDateTime dateFocus;
     private LocalDateTime today;
     private List<EventModel> eventModelList;
-    private CalendarActivityObservable calendarActivityObservable;
+    private EventObservable eventObservable;
 
     @FXML
     private Text year;
@@ -53,8 +54,8 @@ public class CalendarController implements Initializable, Observer {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         dateFocus = LocalDateTime.now();
         today = LocalDateTime.now();
-        this.calendarActivityObservable = new CalendarActivityObservable();
-        this.calendarActivityObservable.addObserver(this);
+        this.eventObservable = new EventObservable();
+        this.eventObservable.addObserver(this);
     }
 
     @Override
@@ -83,10 +84,10 @@ public class CalendarController implements Initializable, Observer {
     public void openNewEventWindow(ActionEvent event) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("EventForm.fxml"));
+            fxmlLoader.setLocation(getClass().getResource("/com/eventscheduler/EventForm.fxml"));
             Parent root = fxmlLoader.load();
             EventController eventController = fxmlLoader.getController();
-            eventController.setCalendarActivityObservable(calendarActivityObservable);
+            eventController.setCalendarActivityObservable(eventObservable);
             Scene scene = new Scene(root, 600, 400);
             Stage stage = new Stage();
             stage.setTitle("Add new event");
@@ -112,11 +113,11 @@ public class CalendarController implements Initializable, Observer {
     private void openDetailEventWindow(EventModel eventModel){
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("EventDetailView.fxml"));
+            fxmlLoader.setLocation(getClass().getResource("/com/eventscheduler/EventDetailView.fxml"));
             Parent root = fxmlLoader.load();
             EventDetailController eventDetailController = fxmlLoader.getController();
             eventDetailController.fillComponentsWithData(eventModel);
-//            eventDetailController.setCalendarActivityObservable(calendarActivityObservable);
+//            eventDetailController.setCalendarActivityObservable(eventObservable);
             Scene scene = new Scene(root, 600, 400);
             Stage stage = new Stage();
             stage.setTitle("Event detail");

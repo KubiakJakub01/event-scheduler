@@ -1,5 +1,6 @@
-package com.eventscheduler;
+package com.eventscheduler.controller;
 
+import com.eventscheduler.controller.EventController;
 import com.eventscheduler.model.EventModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

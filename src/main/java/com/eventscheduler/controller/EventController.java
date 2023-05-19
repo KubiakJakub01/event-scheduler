@@ -1,4 +1,4 @@
-package com.eventscheduler;
+package com.eventscheduler.controller;
 
 import com.eventscheduler.model.EventModel;
 import javafx.beans.binding.BooleanBinding;
@@ -14,7 +14,7 @@ import java.util.ResourceBundle;
 public class EventController implements Initializable {
     System.Logger logger = System.getLogger(EventController.class.getName());
 
-    private CalendarActivityObservable calendarActivityObservable;
+    private EventObservable eventObservable;
 
 
     @FXML
@@ -55,7 +55,7 @@ public class EventController implements Initializable {
 
     private void submitNewEvent(String title, LocalDateTime date, Double duration, String place, String description) {
         EventModel newEvent = new EventModel(title, date, duration, place, description);
-        calendarActivityObservable.notifyObservers(newEvent);
+        eventObservable.notifyObservers(newEvent);
         logger.log(System.Logger.Level.INFO, "New event submitted");
         closeEventWindow();
     }
@@ -102,7 +102,7 @@ public class EventController implements Initializable {
 
     }
 
-    public void setCalendarActivityObservable(CalendarActivityObservable calendarActivityObservable) {
-        this.calendarActivityObservable = calendarActivityObservable;
+    public void setCalendarActivityObservable(EventObservable eventObservable) {
+        this.eventObservable = eventObservable;
     }
 }

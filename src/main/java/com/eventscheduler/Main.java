@@ -1,5 +1,6 @@
 package com.eventscheduler;
 
+import com.eventscheduler.controller.CalendarController;
 import com.eventscheduler.model.ConnectionDB;
 import com.eventscheduler.model.EventManager;
 import javafx.application.Application;
