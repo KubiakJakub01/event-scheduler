@@ -8,6 +8,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -25,12 +27,12 @@ import java.util.*;
 public class CalendarController implements Initializable, Observer {
     private static final System.Logger logger = System.getLogger(EventModel.class.getName());
     private static final int MAX_EVENT_PER_DAY = 3;
-    private static final int LIMIT_UPCOMING_EVENT = 5;
+    private int LIMIT_UPCOMING_EVENT = 5;
 
     private EventManager eventManager;
     private LocalDateTime dateFocus;
     private LocalDateTime today;
-    private List<EventModel> eventModelList;
+    private LocalDateTime selectedDate;
     private EventObservable eventObservable;
 
     @FXML
@@ -48,11 +50,16 @@ public class CalendarController implements Initializable, Observer {
     @FXML
     private FlowPane dayEventListPane;
 
+    @FXML
+    private Spinner eventLimitSpinner;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         dateFocus = LocalDateTime.now();
         today = LocalDateTime.now();
+        selectedDate = null;
+        initSpinners();
     }
 
     @Override
@@ -94,6 +101,16 @@ public class CalendarController implements Initializable, Observer {
         }
     }
 
+    private void initSpinners(){
+        // Init event limit spinner
+        eventLimitSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, LIMIT_UPCOMING_EVENT));
+        eventLimitSpinner.valueProperty().addListener((obs, oldValue, newValue) -> {
+            LIMIT_UPCOMING_EVENT = (int) newValue;
+            drawUpcomingEvents();
+        });
+        eventLimitSpinner.setEditable(false);
+    }
+
     private void openDetailEventWindow(EventModel eventModel){
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -123,6 +140,9 @@ public class CalendarController implements Initializable, Observer {
     private void drawCalendarView(){
         drawCalendar();
         drawUpcomingEvents();
+        if (selectedDate != null){
+            drawDayEvents(selectedDate);
+        }
     }
 
     private void drawCalendar(){
@@ -192,7 +212,8 @@ public class CalendarController implements Initializable, Observer {
                 moreActivities.setOnMouseClicked(mouseEvent -> {
                     //On Text clicked
                     logger.log(System.Logger.Level.INFO, "Event clicked");
-                    drawDayEvents(calendarActivities.get(0).getDate());
+                    selectedDate = calendarActivities.get(0).getDate();
+                    drawDayEvents(selectedDate);
                 });
                 break;
             }
