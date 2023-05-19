@@ -2,6 +2,7 @@ package com.eventscheduler.model;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -34,8 +35,9 @@ public class EventManager implements DBManager<EventModel>{
     }
 
     @Override
-    public void updateElement(EventModel event) {
-        events.updateOne((Bson) event, (Bson) event);
+    public void updateElement(EventModel event, EventModel updatedEvent) {
+        Bson filter = Filters.eq("_id", event.getId());
+        events.updateOne(filter, new Document("$set", updatedEvent));
         logger.log(System.Logger.Level.INFO, "Event " + event.getTitle() + " updated in database");
     }
 
@@ -76,16 +78,14 @@ public class EventManager implements DBManager<EventModel>{
                 ))
         );
 
-        // Define the sort order
-        Bson sort = Sorts.ascending("date");
-
         // Retrieve the events matching the filter
         List<EventModel> eventsList = new ArrayList<>();
-        try (MongoCursor<EventModel> cursor = events.find(filter).sort(sort).iterator()) {
+        try (MongoCursor<EventModel> cursor = events.find(filter).iterator()) {
             while (cursor.hasNext()) {
                 eventsList.add(cursor.next());
             }
         }
+        // Sort the events by date
         logger.log(System.Logger.Level.INFO, "Found " + eventsList.size() + " events in database");
 
         return eventsList;
@@ -141,9 +141,12 @@ public class EventManager implements DBManager<EventModel>{
                 ))
         );
 
+        // Define the sort order
+        Bson sort = Sorts.ascending("date");
+
         // Retrieve the events matching the filter
         List<EventModel> eventsList = new ArrayList<>();
-        try (MongoCursor<EventModel> cursor = events.find(filter).limit(limit).iterator()) {
+        try (MongoCursor<EventModel> cursor = events.find(filter).sort(sort).limit(limit).iterator()) {
             while (cursor.hasNext()) {
                 eventsList.add(cursor.next());
             }

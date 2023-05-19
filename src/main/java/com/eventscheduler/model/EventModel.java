@@ -28,6 +28,27 @@ public class EventModel implements Model {
         logger.log(System.Logger.Level.INFO, this.toString());
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (!(obj instanceof EventModel))
+            return false;
+        if (obj == this)
+            return true;
+        return this.title.equals(((EventModel) obj).title) && this.date.equals(((EventModel) obj).date)
+                && this.duration.equals(((EventModel) obj).duration)
+                && this.place.equals(((EventModel) obj).place)
+                && this.description.equals(((EventModel) obj).description);
+    }
+
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
+
     public String getTitle() {
         return title;
     }
