@@ -32,6 +32,7 @@ public class Main extends Application {
         stage.setOnCloseRequest(windowEvent -> {
             System.exit(0);
         });
+        stage.setResizable(false);
         stage.show();
     }
 

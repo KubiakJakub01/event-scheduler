@@ -105,7 +105,7 @@ public class CalendarController implements Initializable, Observer {
 
     private void drawCalendarView(){
         drawCalendar();
-        drawEventList();
+        drawUpcomingEvents();
     }
 
     private void openDetailEventWindow(CalendarActivity calendarActivity){
@@ -185,38 +185,6 @@ public class CalendarController implements Initializable, Observer {
         }
     }
 
-    private void drawEventList(){
-        eventListPane.getChildren().clear();
-        ScrollPane scrollPane = new ScrollPane();
-        VBox dayEventList = new VBox();
-        // Sort by date
-        List<CalendarActivity> calendarActivityList = eventModel.getNearestEvents(LIMIT_UPCOMING_EVENT);
-
-        for (CalendarActivity calendarActivity : calendarActivityList) {
-            StringBuffer sb = new StringBuffer();
-            // Get date in format dd/MM/yyyy HH:mm
-            sb.append(calendarActivity.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
-            sb.append(": ");
-            sb.append(calendarActivity.getPlace());
-            sb.append(", ");
-            sb.append(calendarActivity.getDuration());
-            Text text = new Text(sb.toString());
-            dayEventList.getChildren().add(text);
-            // Add break line
-            dayEventList.getChildren().add(new Text("\n"));
-            text.setOnMouseClicked(mouseEvent -> {
-                //On Text clicked
-                logger.log(System.Logger.Level.INFO, "Event clicked");
-                openDetailEventWindow(calendarActivity);
-            });
-        }
-        // Add scroll bar
-        scrollPane.setPrefHeight(eventListPane.getPrefHeight());
-        scrollPane.setPrefWidth(eventListPane.getPrefWidth());
-        scrollPane.setContent(dayEventList);
-        eventListPane.getChildren().add(scrollPane);
-    }
-
     private void createCalendarActivity(List<CalendarActivity> calendarActivities, double rectangleHeight, double rectangleWidth, StackPane stackPane) {
         VBox calendarActivityBox = new VBox();
         for (int k = 0; k < calendarActivities.size(); k++) {
@@ -226,7 +194,7 @@ public class CalendarController implements Initializable, Observer {
                 moreActivities.setOnMouseClicked(mouseEvent -> {
                     //On Text clicked
                     logger.log(System.Logger.Level.INFO, "Event clicked");
-                    openDetailEventWindow(calendarActivities.get(0));
+                    drawDayEvents(calendarActivities.get(0).getDate());
                 });
                 break;
             }
@@ -273,10 +241,73 @@ public class CalendarController implements Initializable, Observer {
         int year = dateFocus.getYear();
         int month = dateFocus.getMonth().getValue();
 
-        List<CalendarActivity> monthCalendarActivityList = new ArrayList<>();
-        monthCalendarActivityList = eventModel.getEventsByMonth(year, month);
+        List<CalendarActivity> monthCalendarActivityList = eventModel.getEventsByMonth(year, month);
 
         return createCalendarMap(monthCalendarActivityList);
+    }
+
+    private void drawUpcomingEvents(){
+        eventListPane.getChildren().clear();
+        ScrollPane scrollPane = new ScrollPane();
+        VBox dayEventList = new VBox();
+        // Sort by date
+        List<CalendarActivity> calendarActivityList = eventModel.getNearestEvents(LIMIT_UPCOMING_EVENT);
+
+        for (CalendarActivity calendarActivity : calendarActivityList) {
+            StringBuffer sb = new StringBuffer();
+            // Get date in format dd/MM/yyyy HH:mm
+            sb.append(calendarActivity.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+            sb.append(": ");
+            sb.append(calendarActivity.getPlace());
+            sb.append(", ");
+            sb.append(calendarActivity.getDuration());
+            Text text = new Text(sb.toString());
+            dayEventList.getChildren().add(text);
+            // Add break line
+            dayEventList.getChildren().add(new Text("\n"));
+            text.setOnMouseClicked(mouseEvent -> {
+                //On Text clicked
+                logger.log(System.Logger.Level.INFO, "Event clicked");
+                openDetailEventWindow(calendarActivity);
+            });
+        }
+        // Add scroll bar
+        scrollPane.setPrefHeight(eventListPane.getPrefHeight());
+        scrollPane.setPrefWidth(eventListPane.getPrefWidth());
+        scrollPane.setContent(dayEventList);
+        eventListPane.getChildren().add(scrollPane);
+    }
+
+    private void drawDayEvents(LocalDateTime dateFocus){
+        dayEventListPane.getChildren().clear();
+        ScrollPane scrollPane = new ScrollPane();
+        VBox dayEventList = new VBox();
+        // Sort by date
+        List<CalendarActivity> calendarActivityList = eventModel.getEventsByDay(dateFocus.getYear(), dateFocus.getMonth().getValue(), dateFocus.getDayOfMonth());
+
+        for (CalendarActivity calendarActivity : calendarActivityList) {
+            StringBuffer sb = new StringBuffer();
+            // Get date in format dd/MM/yyyy HH:mm
+            sb.append(calendarActivity.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+            sb.append(": ");
+            sb.append(calendarActivity.getPlace());
+            sb.append(", ");
+            sb.append(calendarActivity.getDuration());
+            Text text = new Text(sb.toString());
+            dayEventList.getChildren().add(text);
+            // Add break line
+            dayEventList.getChildren().add(new Text("\n"));
+            text.setOnMouseClicked(mouseEvent -> {
+                //On Text clicked
+                logger.log(System.Logger.Level.INFO, "Event clicked");
+                openDetailEventWindow(calendarActivity);
+            });
+        }
+        // Add scroll bar
+        scrollPane.setPrefHeight(dayEventListPane.getPrefHeight());
+        scrollPane.setPrefWidth(dayEventListPane.getPrefWidth());
+        scrollPane.setContent(dayEventList);
+        dayEventListPane.getChildren().add(scrollPane);
     }
 
     public EventModel getEventModel() {
