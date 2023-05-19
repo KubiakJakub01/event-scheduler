@@ -1,6 +1,5 @@
 package com.eventscheduler.model;
 
-import com.eventscheduler.CalendarActivity;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Sorts;
@@ -13,38 +12,49 @@ import java.util.List;
 
 import static com.mongodb.client.model.Filters.*;
 
-public class EventModel {
-    private static final System.Logger logger = System.getLogger(EventModel.class.getName());
+public class EventManager implements DBManager<EventModel>{
+    private static final System.Logger logger = System.getLogger(EventManager.class.getName());
 
-    MongoCollection<CalendarActivity> events;
+    MongoCollection<EventModel> events;
 
-    public EventModel(MongoCollection<CalendarActivity> events) {
+    public EventManager(MongoCollection<EventModel> events) {
         this.events = events;
     }
 
-    public void addEvent(CalendarActivity event) {
+    @Override
+    public void addElement(EventModel event) {
         events.insertOne(event);
         logger.log(System.Logger.Level.INFO, "Event " + event.getTitle() + " added to database");
     }
 
-    public void deleteEvent(CalendarActivity event) {
+    @Override
+    public void removeElement(EventModel event) {
         events.deleteOne((Bson) event);
         logger.log(System.Logger.Level.INFO, "Event " + event.getTitle() + " deleted from database");
     }
 
-    public void updateEvent(CalendarActivity event) {
+    @Override
+    public void updateElement(EventModel event) {
         events.updateOne((Bson) event, (Bson) event);
         logger.log(System.Logger.Level.INFO, "Event " + event.getTitle() + " updated in database");
     }
 
-    public List<CalendarActivity> getAllEvents() {
+
+    @Override
+    public EventModel getElement(EventModel event) {
+        logger.log(System.Logger.Level.INFO, "Getting event " + event.getTitle() + " from database");
+        return events.find((Bson) event).first();
+    }
+
+    @Override
+    public List<EventModel> getAllElements() {
         logger.log(System.Logger.Level.INFO, "Getting all events from database");
-        List<CalendarActivity> eventsList = events.find().into(new ArrayList<>());
+        List<EventModel> eventsList = events.find().into(new ArrayList<>());
         logger.log(System.Logger.Level.INFO, "Found " + eventsList.size() + " events in database");
         return eventsList;
     }
 
-    public List<CalendarActivity> getEventsByMonth(int year, int month) {
+    public List<EventModel> getEventsByMonth(int year, int month) {
         // Create the start and end date of the month
         LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDate endDate = startDate.plusMonths(1).minusDays(1);
@@ -70,8 +80,8 @@ public class EventModel {
         Bson sort = Sorts.ascending("date");
 
         // Retrieve the events matching the filter
-        List<CalendarActivity> eventsList = new ArrayList<>();
-        try (MongoCursor<CalendarActivity> cursor = events.find(filter).sort(sort).iterator()) {
+        List<EventModel> eventsList = new ArrayList<>();
+        try (MongoCursor<EventModel> cursor = events.find(filter).sort(sort).iterator()) {
             while (cursor.hasNext()) {
                 eventsList.add(cursor.next());
             }
@@ -81,7 +91,7 @@ public class EventModel {
         return eventsList;
     }
 
-    public List<CalendarActivity> getEventsByDay(int year, int month, int day){
+    public List<EventModel> getEventsByDay(int year, int month, int day){
         // Create the start and end date of the day
         LocalDate startDate = LocalDate.of(year, month, day);
         LocalDate endDate = startDate.plusDays(1);
@@ -111,8 +121,8 @@ public class EventModel {
         Bson sort = Sorts.ascending("date");
 
         // Retrieve the events matching the filter
-        List<CalendarActivity> eventsList = new ArrayList<>();
-        try (MongoCursor<CalendarActivity> cursor = events.find(filter).sort(sort).iterator()) {
+        List<EventModel> eventsList = new ArrayList<>();
+        try (MongoCursor<EventModel> cursor = events.find(filter).sort(sort).iterator()) {
             while (cursor.hasNext()) {
                 eventsList.add(cursor.next());
             }
@@ -122,7 +132,7 @@ public class EventModel {
         return eventsList;
     }
 
-    public List<CalendarActivity> getNearestEvents(int limit) {
+    public List<EventModel> getNearestEvents(int limit) {
         logger.log(System.Logger.Level.INFO, "Getting " + limit + " nearest events from database");
         // Create the query filter
         Bson filter = and(
@@ -132,8 +142,8 @@ public class EventModel {
         );
 
         // Retrieve the events matching the filter
-        List<CalendarActivity> eventsList = new ArrayList<>();
-        try (MongoCursor<CalendarActivity> cursor = events.find(filter).limit(limit).iterator()) {
+        List<EventModel> eventsList = new ArrayList<>();
+        try (MongoCursor<EventModel> cursor = events.find(filter).limit(limit).iterator()) {
             while (cursor.hasNext()) {
                 eventsList.add(cursor.next());
             }

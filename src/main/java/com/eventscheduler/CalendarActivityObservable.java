@@ -17,9 +17,9 @@ public class CalendarActivityObservable implements Observable {
     }
 
     @Override
-    public void notifyObservers(Activity activity) {
+    public void notifyObservers(Model model) {
         for (Observer observer : observers) {
-            observer.update(activity);
+            observer.update(model);
         }
     }
 }

@@ -1,5 +1,5 @@
 package com.eventscheduler;
 
 public interface Observer {
-    void update(Activity activity);
+    void update(Model model);
 }

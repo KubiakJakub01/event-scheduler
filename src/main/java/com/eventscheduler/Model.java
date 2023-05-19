@@ -1,4 +1,4 @@
 package com.eventscheduler;
 
-public interface Activity {
+public interface Model {
 }

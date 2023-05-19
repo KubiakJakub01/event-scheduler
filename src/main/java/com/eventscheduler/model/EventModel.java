@@ -1,12 +1,13 @@
-package com.eventscheduler;
+package com.eventscheduler.model;
 
+import com.eventscheduler.Model;
 import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
 
-public class CalendarActivity implements Activity{
-    private static final System.Logger logger = System.getLogger(CalendarActivity.class.getName());
+public class EventModel implements Model {
+    private static final System.Logger logger = System.getLogger(EventModel.class.getName());
 
     @BsonId
     private ObjectId id;
@@ -16,9 +17,9 @@ public class CalendarActivity implements Activity{
     private String place;
     private String description;
 
-    public CalendarActivity() {
+    public EventModel() {
     }
-    public CalendarActivity(String title, LocalDateTime date, Double duration, String place, String description) {
+    public EventModel(String title, LocalDateTime date, Double duration, String place, String description) {
         this.title = title;
         this.date = date;
         this.duration = duration;
@@ -71,7 +72,7 @@ public class CalendarActivity implements Activity{
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("CalendarActivity{");
+        sb.append("EventModel{");
         sb.append("title='");
         sb.append(title);
         sb.append("', date='");
