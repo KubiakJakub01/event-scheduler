@@ -82,8 +82,7 @@ public class EventModel {
         // Create the query filter
         Bson filter = and(
                 eq("$expr", and(
-                        eq("$gte", List.of("$date", LocalDate.now().atStartOfDay())),
-                        eq("$lte", List.of("$date", LocalDate.now().plusDays(7).atTime(23, 59, 59)))
+                        eq("$gte", List.of("$date", LocalDate.now().atStartOfDay()))
                 ))
         );
 
