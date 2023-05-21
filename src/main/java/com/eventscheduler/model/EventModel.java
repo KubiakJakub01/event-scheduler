@@ -43,6 +43,12 @@ public class EventModel implements Model {
         logger.log(System.Logger.Level.INFO, this.toString());
     }
 
+    /**
+     * Compare two EventModel objects.
+     *
+     * @param obj
+     * @return true if the two objects are equal, false otherwise.
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;
