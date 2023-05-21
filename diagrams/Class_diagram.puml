@@ -1,0 +1,343 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": false,
+    "cutInterfaceStructures": false,
+    "cutDataStructures": false,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 3,
+    "backwardDepth": 3,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.eventscheduler.controller.CalendarController",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1208771743 { 
+   	label=eventscheduler
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   Main426909842[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Main</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   calendarController: CalendarController [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   connectionDB: ConnectionDB [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   eventManager: EventManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   eventObservable: EventObservable [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   eventScheduler: EventScheduler [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ closeDBConnection()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ initDBConnection()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ initDependencies()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ main(args: String[])</TD></TR>
+<TR><TD ALIGN="LEFT" >+ start(stage: Stage)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+subgraph cluster_1119072329 { 
+   	label=controller
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   CalendarController1674334748[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)CalendarController</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   LIMIT_UPCOMING_EVENT: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   calendar: FlowPane [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   dateFocus: LocalDateTime [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   dayEventListPane: FlowPane [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   eventLimitSpinner: Spinner [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   eventListPane: FlowPane [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   eventManager: EventManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   month: Text [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   selectedDate: LocalDateTime [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   timeLabel: Label [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   today: LocalDateTime [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   year: Text [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ backOneMonth(event: ActionEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" >- createCalendarActivity(calendarActivities: List&lt;EventModel&gt;, rectangleHeight: double, rectangleWidth: double, stackPane: StackPane)</TD></TR>
+<TR><TD ALIGN="LEFT" >- createCalendarMap(calendarActivities: List&lt;EventModel&gt;): Map&lt;Integer, List&lt;EventModel&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- drawCalendar()</TD></TR>
+<TR><TD ALIGN="LEFT" >- drawCalendarView()</TD></TR>
+<TR><TD ALIGN="LEFT" >- drawDayEvents(dateFocus: LocalDateTime)</TD></TR>
+<TR><TD ALIGN="LEFT" >- drawUpcomingEvents()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ forwardOneMonth(event: ActionEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" >- getCalendarActivitiesMonth(dateFocus: LocalDateTime): Map&lt;Integer, List&lt;EventModel&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ initController(eventManager: EventManager)</TD></TR>
+<TR><TD ALIGN="LEFT" >- initSpinners()</TD></TR>
+<TR><TD ALIGN="LEFT" >- initTimeLabel()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ initialize(url: URL, resourceBundle: ResourceBundle)</TD></TR>
+<TR><TD ALIGN="LEFT" >- openDetailEventWindow(eventModel: EventModel)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ openNewEventWindow(event: ActionEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ update()</TD></TR>
+<TR><TD ALIGN="LEFT" >- updateTime()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+EventController1674334748[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)EventController</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   datePicker: DatePicker [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   descriptionTextArea: TextArea [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   eventManager: EventManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   handleSubmitButton: Button [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   hourSpinner: Spinner [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   logger: Logger [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   minuteSpinner: Spinner [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   placeField: TextField [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   timeField: TextField [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   titleField: TextField [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- closeEventWindow()</TD></TR>
+<TR><TD ALIGN="LEFT" >- handleSubmit()</TD></TR>
+<TR><TD ALIGN="LEFT" >- initSpinners()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ initialize(url: URL, resourceBundle: ResourceBundle)</TD></TR>
+<TR><TD ALIGN="LEFT" >- submitNewEvent(title: String, date: LocalDateTime, duration: Double, place: String, description: String)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+EventDetailController1674334748[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)EventDetailController</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   datePicker: DatePicker [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   deleteButton: Button [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   descriptionTextArea: TextArea [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   eventManager: EventManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   eventModel: EventModel [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   hourSpinner: Spinner [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   isUpdate: boolean [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   logger: Logger [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   minuteSpinner: Spinner [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   okButton: Button [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   placeField: TextField [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   timeField: TextField [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   titleField: TextField [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   updateButton: Button [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- cancelUpdate()</TD></TR>
+<TR><TD ALIGN="LEFT" >- closeDetailEventWindow()</TD></TR>
+<TR><TD ALIGN="LEFT" >- createEventModelFromComponents(): EventModel</TD></TR>
+<TR><TD ALIGN="LEFT" >- disableUpdateMode()</TD></TR>
+<TR><TD ALIGN="LEFT" >- enableUpdateMode()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ fillComponentsWithData(eventModel: EventModel)</TD></TR>
+<TR><TD ALIGN="LEFT" >- handleDelete(event: ActionEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" >- handleOK(event: ActionEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" >- handleUpdate(event: ActionEvent)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ initController(eventManager: EventManager, eventModel: EventModel)</TD></TR>
+<TR><TD ALIGN="LEFT" >- initSpinners()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ initialize(url: URL, resourceBundle: ResourceBundle)</TD></TR>
+<TR><TD ALIGN="LEFT" >- updateEvent(updatedEventModel: EventModel)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+EventObservable1674334748[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)EventObservable</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   observers: List&lt;Observer&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ addObserver(observer: Observer)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ notifyObservers()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ removeObserver(observer: Observer)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+EventScheduler1674334748[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)EventScheduler</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   eventManager: EventManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   eventWindow: Stage [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   scheduledEvent: EventModel [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   scheduler: ScheduledExecutorService [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- reloadScheduler()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ scheduleEvent(event: EventModel)</TD></TR>
+<TR><TD ALIGN="LEFT" >- scheduleNextEvent()</TD></TR>
+<TR><TD ALIGN="LEFT" >- showEventWindow(event: EventModel)</TD></TR>
+<TR><TD ALIGN="LEFT" >- shutdownScheduler()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ update()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+
+subgraph cluster_2072163932 { 
+   	label=model
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   EventManager1509229399[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)EventManager</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >#   eventObservable: EventObservable [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   events: MongoCollection&lt;EventModel&gt; [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ addElement(event: EventModel)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getElement(event: EventModel): EventModel</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getEventsByDay(year: int, month: int, day: int): List&lt;EventModel&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getEventsByMonth(year: int, month: int): List&lt;EventModel&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getNearestEvents(limit: int): List&lt;EventModel&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ removeElement(event: EventModel)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ updateElement(event: EventModel, updatedEvent: EventModel)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+EventModel1509229399[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)EventModel</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   date: LocalDateTime [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   description: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   duration: Double [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   id: ObjectId [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   place: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   title: String [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+CalendarController1674334748 -> EventDetailController1674334748[label="openDetailEventWindow() -> initController()"];
+CalendarController1674334748 -> EventManager1509229399[label="eventManager
+[0..1]"];
+CalendarController1674334748 -> EventScheduler1674334748[arrowhead=none];
+EventController1674334748 -> EventManager1509229399[label="eventManager
+[0..1]"];
+EventDetailController1674334748 -> EventManager1509229399[label="eventManager
+[0..1]"];
+EventDetailController1674334748 -> EventModel1509229399[label="eventModel
+[0..1]"];
+EventManager1509229399 -> EventModel1509229399[label="events
+[0..1]"];
+EventManager1509229399 -> EventObservable1674334748[label="eventObservable
+[0..1]"];
+EventObservable1674334748 -> CalendarController1674334748[label="observers
+[0..*]", arrowhead=none];
+EventScheduler1674334748 -> EventManager1509229399[label="eventManager
+[0..1]"];
+EventScheduler1674334748 -> EventModel1509229399[label="scheduledEvent
+[0..1]"];
+Main426909842 -> CalendarController1674334748[label="calendarController
+[0..1]"];
+Main426909842 -> EventManager1509229399[label="eventManager
+[0..1]"];
+Main426909842 -> EventObservable1674334748[label="eventObservable
+[0..1]"];
+Main426909842 -> EventScheduler1674334748[label="eventScheduler
+[0..1]"];
+    
+}
+@enduml
