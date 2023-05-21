@@ -1,5 +1,6 @@
 package com.eventscheduler.controller;
 
+import com.eventscheduler.model.EventManager;
 import com.eventscheduler.model.EventModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,6 +14,10 @@ import java.util.ResourceBundle;
 
 public class EventDetailController implements Initializable {
     System.Logger logger = System.getLogger(EventController.class.getName());
+
+    private EventManager eventManager;
+    private EventModel eventModel;
+    private boolean isUpdate = false;
 
     @FXML
     private TextField titleField;
@@ -43,10 +48,6 @@ public class EventDetailController implements Initializable {
 
     @FXML
     private Button deleteButton;
-
-    private boolean isUpdate = false;
-    private EventObservable eventObservable;
-    private EventModel eventModel;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -85,15 +86,15 @@ public class EventDetailController implements Initializable {
             cancelUpdate();
         }
         else {
-            setDisableComponents(false);
-            isUpdate = true;
-            updateButton.setText("Cancel");
+            enableUpdateMode();
         }
     }
 
     @FXML
     private void handleDelete(ActionEvent event) {
         logger.log(System.Logger.Level.INFO, "Delete button pressed");
+        eventManager.removeElement(eventModel);
+        closeDetailEventWindow();
     }
 
     private EventModel createEventModelFromComponents(){
@@ -109,7 +110,7 @@ public class EventDetailController implements Initializable {
 
     private void updateEvent(EventModel updatedEventModel) {
         logger.log(System.Logger.Level.INFO, "Send request to update event");
-        eventObservable.updateEvent(eventModel, updatedEventModel);
+        eventManager.updateElement(eventModel, updatedEventModel);
     }
 
     private void cancelUpdate() {
@@ -117,16 +118,31 @@ public class EventDetailController implements Initializable {
         fillComponentsWithData(eventModel);
     }
 
+    private void enableUpdateMode(){
+        setDisableComponents(false);
+        isUpdate = true;
+        updateButton.setText("Cancel");
+        okButton.setText("Save");
+    }
+
     private void disableUpdateMode(){
         setDisableComponents(true);
         isUpdate = false;
         updateButton.setText("Update");
+        okButton.setText("OK");
     }
 
     private void closeDetailEventWindow() {
         Stage stage = (Stage) okButton.getScene().getWindow();
         stage.close();
         logger.log(System.Logger.Level.INFO, "Detail event window closed");
+    }
+
+    public void initController(EventManager eventManager, EventModel eventModel) {
+        this.eventManager = eventManager;
+        if (eventModel != null) {
+            fillComponentsWithData(eventModel);
+        }
     }
 
     public void fillComponentsWithData(EventModel eventModel) {
@@ -175,8 +191,8 @@ public class EventDetailController implements Initializable {
         });
     }
 
-    public void setEventObservable(EventObservable eventObservable) {
-        this.eventObservable = eventObservable;
+    public void setEventMenager(EventManager eventManager) {
+        this.eventManager = eventManager;
     }
 
     public TextField getTitleField() {

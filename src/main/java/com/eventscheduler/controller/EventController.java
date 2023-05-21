@@ -1,5 +1,6 @@
 package com.eventscheduler.controller;
 
+import com.eventscheduler.model.EventManager;
 import com.eventscheduler.model.EventModel;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
@@ -14,7 +15,7 @@ import java.util.ResourceBundle;
 public class EventController implements Initializable {
     System.Logger logger = System.getLogger(EventController.class.getName());
 
-    private EventObservable eventObservable;
+    private EventManager eventManager;
 
     @FXML
     private TextField titleField;
@@ -54,7 +55,7 @@ public class EventController implements Initializable {
 
     private void submitNewEvent(String title, LocalDateTime date, Double duration, String place, String description) {
         EventModel newEvent = new EventModel(title, date, duration, place, description);
-        eventObservable.addEvent(newEvent);
+        eventManager.addElement(newEvent);
         logger.log(System.Logger.Level.INFO, "New event submitted");
         closeEventWindow();
     }
@@ -101,7 +102,7 @@ public class EventController implements Initializable {
 
     }
 
-    public void setEventObservable(EventObservable eventObservable) {
-        this.eventObservable = eventObservable;
+    public void setEventManager(EventManager eventManager) {
+        this.eventManager = eventManager;
     }
 }
