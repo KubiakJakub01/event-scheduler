@@ -33,7 +33,6 @@ public class CalendarController implements Initializable, Observer {
     private LocalDateTime dateFocus;
     private LocalDateTime today;
     private LocalDateTime selectedDate;
-    private EventObservable eventObservable;
 
     @FXML
     private Text year;
@@ -58,7 +57,7 @@ public class CalendarController implements Initializable, Observer {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         dateFocus = LocalDateTime.now();
         today = LocalDateTime.now();
-        selectedDate = null;
+        selectedDate = LocalDateTime.now();
         initSpinners();
     }
 
@@ -89,7 +88,7 @@ public class CalendarController implements Initializable, Observer {
             fxmlLoader.setLocation(getClass().getResource("/com/eventscheduler/EventForm.fxml"));
             Parent root = fxmlLoader.load();
             EventController eventController = fxmlLoader.getController();
-            eventController.setEventObservable(eventObservable);
+            eventController.setEventManager(eventManager);
             Scene scene = new Scene(root, 600, 400);
             Stage stage = new Stage();
             stage.setTitle("Add new event");
@@ -117,8 +116,7 @@ public class CalendarController implements Initializable, Observer {
             fxmlLoader.setLocation(getClass().getResource("/com/eventscheduler/EventDetailView.fxml"));
             Parent root = fxmlLoader.load();
             EventDetailController eventDetailController = fxmlLoader.getController();
-            eventDetailController.fillComponentsWithData(eventModel);
-            eventDetailController.setEventObservable(eventObservable);
+            eventDetailController.initController(eventManager, eventModel);
             Scene scene = new Scene(root, 600, 400);
             Stage stage = new Stage();
             stage.setTitle("Event detail");
@@ -132,8 +130,6 @@ public class CalendarController implements Initializable, Observer {
 
     public void initController(EventManager eventManager){
         this.eventManager = eventManager;
-        this.eventObservable = new EventObservable(eventManager);
-        this.eventObservable.addObserver(this);
         drawCalendarView();
     }
 
