@@ -1,3 +1,7 @@
+/**
+ The EventScheduler class is responsible for scheduling and managing events.
+ It implements the Observer interface to receive updates when the event list is updated.
+ */
 package com.eventscheduler.controller;
 
 import com.eventscheduler.model.EventManager;
@@ -24,6 +28,11 @@ public class EventScheduler implements Observer {
     private EventModel scheduledEvent;
     private Stage eventWindow;
 
+    /**
+     * Constructs an EventScheduler object with the given EventManager.
+     *
+     * @param eventManager The EventManager instance.
+     */
     public EventScheduler(EventManager eventManager) {
         this.eventManager = eventManager;
         this.scheduledEvent = eventManager.getNearestEvents(1).get(0);
@@ -31,6 +40,11 @@ public class EventScheduler implements Observer {
         scheduleEvent(scheduledEvent);
     }
 
+    /**
+     * Schedules the given event.
+     *
+     * @param event The EventModel to be scheduled.
+     */
     public void scheduleEvent(EventModel event) {
         LocalDateTime currentDateTime = LocalDateTime.now();
         LocalDateTime eventDateTime = event.getDate();
@@ -46,6 +60,11 @@ public class EventScheduler implements Observer {
         }, initialDelay, TimeUnit.SECONDS);
     }
 
+    /**
+     * Displays the event window for the given event.
+     *
+     * @param event The EventModel for which to display the event window.
+     */
     private void showEventWindow(EventModel event) {
         eventWindow = new Stage();
         eventWindow.setTitle("Event Started");
@@ -74,12 +93,18 @@ public class EventScheduler implements Observer {
         eventWindow.show();
     }
 
+    /**
+     * Shuts down the scheduler.
+     */
     private void shutdownScheduler() {
         // Shutdown the scheduler when no longer needed
         scheduler.shutdown();
         logger.log(System.Logger.Level.INFO, "Scheduler shutdown");
     }
 
+    /**
+     * Reloads the scheduler when the event is updated.
+     */
     private void reloadScheduler() {
         // Reload the scheduler when the event is updated
         shutdownScheduler();
@@ -87,12 +112,18 @@ public class EventScheduler implements Observer {
         scheduleEvent(scheduledEvent);
     }
 
+    /**
+     * Schedules the next event based on the nearest upcoming event in the event list.
+     */
     private void scheduleNextEvent() {
         EventModel nextEvent = eventManager.getNearestEvents(1).get(0);
         this.scheduledEvent = nextEvent;
         scheduleEvent(nextEvent);
     }
 
+    /**
+     * Updates the scheduler when the event list is updated.
+     */
     @Override
     public void update() {
         // Update the scheduler when the event list is updated
