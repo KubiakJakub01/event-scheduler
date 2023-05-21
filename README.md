@@ -68,3 +68,29 @@ When the event begins, the application will display a notification: ![Notificati
 This project is implemented with Java version 17 and JavaFX version 17.0.1.
 The mongoDB database is used to store event data. Database connection is established using the mongodb-java-driver version 4.9.0.
 The project is built using Maven. For more information about the dependencies, please refer to the pom.xml file.
+
+## Architecture
+
+We use the Model-View-Controller (MVC) architecture for the Event Scheduler project.
+The EventManager class acts as the model, which stores the event data and provides methods for accessing and modifying the data.
+The CalendarController class acts as the controller, which handles user interactions with the calendar view and updates the view based on changes in the event data.
+The EventModel class represents an individual event and provides methods for accessing and modifying the event attributes.
+The EventController class is responsible for managing the event creation window.
+The EventDetailController class handles the event detail window, which displays information about a specific event.
+The ConnectionDB class is responsible for connecting to the mongoDB database.
+All view components are implemented using FXML files.
+
+### Diagrams
+
+The following diagram shows the class diagram for the Event Scheduler project:
+![Class diagram 1](diagrams/diagram_class_1.PNG)
+![Class diagram 2](diagrams/diagram_class_2.PNG)
+![Class diagram 3](diagrams/diagram_class_3.PNG)
+![Class diagram 4](diagrams/diagram_class_4.PNG)
+
+Note: The class diagram was generated using the [PlantUML Diagram Generator](https://plugins.jetbrains.com/plugin/15991-plantuml-diagram-generator) plugin for IntelliJ.
+
+### Documentation
+
+The documentation for the Event Scheduler project is available in the docs directory.
+The main documentation file is [docs/index.html](docs/index.html).
