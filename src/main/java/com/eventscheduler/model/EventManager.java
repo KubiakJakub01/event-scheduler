@@ -1,3 +1,8 @@
+/**
+ The EventManager class is responsible for managing events in the MongoDB database.
+ It implements the DBManager interface and provides methods to add, remove, update, and retrieve events from the database.
+ It also provides methods to retrieve events based on specific criteria such as month, day, and nearest events.
+ */
 package com.eventscheduler.model;
 
 import com.eventscheduler.controller.EventObservable;
@@ -22,6 +27,12 @@ public class EventManager implements DBManager<EventModel> {
     MongoCollection<EventModel> events;
     EventObservable eventObservable;
 
+    /**
+     * Constructs an EventManager object with the specified MongoCollection and EventObservable.
+     *
+     * @param events           The MongoCollection representing the events collection in the database.
+     * @param eventObservable The EventObservable object to notify observers of changes in events.
+     */
     public EventManager(MongoCollection<EventModel> events, EventObservable eventObservable) {
         this.events = events;
         this.eventObservable = eventObservable;
@@ -64,6 +75,13 @@ public class EventManager implements DBManager<EventModel> {
         return eventsList;
     }
 
+    /**
+     * Retrieves events from the database for the specified month and year.
+     *
+     * @param year  The year.
+     * @param month The month.
+     * @return A list of EventModel objects representing the events in the specified month and year.
+     */
     public List<EventModel> getEventsByMonth(int year, int month) {
         // Create the start and end date of the month
         LocalDate startDate = LocalDate.of(year, month, 1);
@@ -101,6 +119,14 @@ public class EventManager implements DBManager<EventModel> {
         return eventsList;
     }
 
+    /**
+     * Retrieves events from the database for the specified day, month, and year.
+     *
+     * @param year  The year.
+     * @param month The month.
+     * @param day   The day.
+     * @return A list of EventModel objects representing the events on the specified day, month, and year.
+     */
     public List<EventModel> getEventsByDay(int year, int month, int day) {
         // Create the start and end date of the day
         LocalDate startDate = LocalDate.of(year, month, day);
@@ -142,6 +168,12 @@ public class EventManager implements DBManager<EventModel> {
         return eventsList;
     }
 
+    /**
+     * Retrieves the nearest events from the database.
+     *
+     * @param limit The maximum number of events to retrieve.
+     * @return A list of EventModel objects representing the nearest events.
+     */
     public List<EventModel> getNearestEvents(int limit) {
         logger.log(System.Logger.Level.INFO, "Getting " + limit + " nearest events from database");
         // Create the query filter
