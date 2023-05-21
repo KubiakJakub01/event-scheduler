@@ -59,7 +59,7 @@ This view also shows the list of upcoming events:
 
 ![Upcoming events view](images/upcoming_event_view.png)
 
-Users can click on '...' to view whole list of events in one day:
+Users can click on `...` to view whole list of events in one day:
 
 ![Events in one day view](images/day_event_view.png)
 
