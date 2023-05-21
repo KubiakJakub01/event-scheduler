@@ -1,3 +1,7 @@
+/**
+ The EventDetailController class is responsible for handling user interactions and managing event details in the event scheduler.
+ It controls the event detail window and communicates with the EventManager.
+ */
 package com.eventscheduler.controller;
 
 import com.eventscheduler.model.EventManager;
@@ -49,6 +53,12 @@ public class EventDetailController implements Initializable {
     @FXML
     private Button deleteButton;
 
+    /**
+     * Initializes the controller.
+     *
+     * @param url            The URL location of the FXML file.
+     * @param resourceBundle The ResourceBundle for the FXML file.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Set all components to be disabled
@@ -58,6 +68,12 @@ public class EventDetailController implements Initializable {
         setTimeField();
     }
 
+    /**
+     * Handles the OK button click event.
+     * If in update mode, checks for changes and updates the event. Otherwise, closes the window.
+     *
+     * @param event The ActionEvent triggered by the OK button.
+     */
     @FXML
     private void handleOK(ActionEvent event) {
         logger.log(System.Logger.Level.INFO, "Ok button pressed");
@@ -76,6 +92,12 @@ public class EventDetailController implements Initializable {
         }
     }
 
+    /**
+     * Handles the Update button click event.
+     * Toggles between update mode and view mode.
+     *
+     * @param event The ActionEvent triggered by the Update button.
+     */
     @FXML
     private void handleUpdate(ActionEvent event) {
         logger.log(System.Logger.Level.INFO, "Update button pressed");
@@ -87,6 +109,12 @@ public class EventDetailController implements Initializable {
         }
     }
 
+    /**
+     * Handles the Delete button click event.
+     * Removes the event from the event manager and closes the window.
+     *
+     * @param event The ActionEvent triggered by the Delete button.
+     */
     @FXML
     private void handleDelete(ActionEvent event) {
         logger.log(System.Logger.Level.INFO, "Delete button pressed");
@@ -94,6 +122,11 @@ public class EventDetailController implements Initializable {
         closeDetailEventWindow();
     }
 
+    /**
+     * Creates an EventModel object using the values from the form components.
+     *
+     * @return The created EventModel.
+     */
     private EventModel createEventModelFromComponents() {
         String title = titleField.getText();
         int hour = (int) hourSpinner.getValue();
@@ -105,16 +138,27 @@ public class EventDetailController implements Initializable {
         return new EventModel(title, date, duration, place, description);
     }
 
+    /**
+     * Updates the event with the provided updatedEventModel.
+     *
+     * @param updatedEventModel The updated EventModel.
+     */
     private void updateEvent(EventModel updatedEventModel) {
         logger.log(System.Logger.Level.INFO, "Send request to update event");
         eventManager.updateElement(eventModel, updatedEventModel);
     }
 
+    /**
+     * Cancels the update operation and reverts the form components to the original event data.
+     */
     private void cancelUpdate() {
         logger.log(System.Logger.Level.INFO, "Cancel update");
         fillComponentsWithData(eventModel);
     }
 
+    /**
+     * Enables the update mode by enabling the form components and changing button labels.
+     */
     private void enableUpdateMode() {
         setDisableComponents(false);
         isUpdate = true;
@@ -122,6 +166,9 @@ public class EventDetailController implements Initializable {
         okButton.setText("Save");
     }
 
+    /**
+     * Disables the update mode by disabling the form components and changing button labels.
+     */
     private void disableUpdateMode() {
         setDisableComponents(true);
         isUpdate = false;
@@ -129,12 +176,21 @@ public class EventDetailController implements Initializable {
         okButton.setText("OK");
     }
 
+    /**
+     * Closes the detail event window.
+     */
     private void closeDetailEventWindow() {
         Stage stage = (Stage) okButton.getScene().getWindow();
         stage.close();
         logger.log(System.Logger.Level.INFO, "Detail event window closed");
     }
 
+    /**
+     * Initializes the controller with the provided EventManager and EventModel.
+     *
+     * @param eventManager The EventManager instance.
+     * @param eventModel   The EventModel to display in the detail window.
+     */
     public void initController(EventManager eventManager, EventModel eventModel) {
         this.eventManager = eventManager;
         if (eventModel != null) {
@@ -142,6 +198,11 @@ public class EventDetailController implements Initializable {
         }
     }
 
+    /**
+     * Fills the form components with data from the provided EventModel.
+     *
+     * @param eventModel The EventModel containing the event data.
+     */
     public void fillComponentsWithData(EventModel eventModel) {
         this.eventModel = eventModel;
         titleField.setText(eventModel.getTitle());
@@ -153,6 +214,9 @@ public class EventDetailController implements Initializable {
         descriptionTextArea.setText(eventModel.getDescription());
     }
 
+    /**
+     * Initializes the spinners for hour and minute selection.
+     */
     private void initSpinners() {
         hourSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0, 1));
         hourSpinner.setEditable(true);
@@ -170,6 +234,11 @@ public class EventDetailController implements Initializable {
         });
     }
 
+    /**
+     * Set disable property of all form components.
+     *
+     * @param disable   If disable
+     */
     private void setDisableComponents(boolean disable) {
         titleField.setDisable(disable);
         datePicker.setDisable(disable);
@@ -180,104 +249,15 @@ public class EventDetailController implements Initializable {
         descriptionTextArea.setDisable(disable);
     }
 
+    /**
+     * Sets a listener for the time field to restrict input to a valid time format.
+     */
     private void setTimeField() {
         timeField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d{0,2}([\\.]\\d{0,1})?")) {
                 timeField.setText(oldValue);
             }
         });
-    }
-
-    public void setEventMenager(EventManager eventManager) {
-        this.eventManager = eventManager;
-    }
-
-    public TextField getTitleField() {
-        return titleField;
-    }
-
-    public void setTitleField(TextField titleField) {
-        this.titleField = titleField;
-    }
-
-    public DatePicker getDatePicker() {
-        return datePicker;
-    }
-
-    public void setDatePicker(DatePicker datePicker) {
-        this.datePicker = datePicker;
-    }
-
-    public Spinner getHourSpinner() {
-        return hourSpinner;
-    }
-
-    public void setHourSpinner(Spinner hourSpinner) {
-        this.hourSpinner = hourSpinner;
-    }
-
-    public Spinner getMinuteSpinner() {
-        return minuteSpinner;
-    }
-
-    public void setMinuteSpinner(Spinner minuteSpinner) {
-        this.minuteSpinner = minuteSpinner;
-    }
-
-    public TextField getTimeField() {
-        return timeField;
-    }
-
-    public void setTimeField(TextField timeField) {
-        this.timeField = timeField;
-    }
-
-    public TextField getPlaceField() {
-        return placeField;
-    }
-
-    public void setPlaceField(TextField placeField) {
-        this.placeField = placeField;
-    }
-
-    public TextArea getDescriptionTextArea() {
-        return descriptionTextArea;
-    }
-
-    public void setDescriptionTextArea(TextArea descriptionTextArea) {
-        this.descriptionTextArea = descriptionTextArea;
-    }
-
-    public Button getOkButton() {
-        return okButton;
-    }
-
-    public void setOkButton(Button okButton) {
-        this.okButton = okButton;
-    }
-
-    public Button getUpdateButton() {
-        return updateButton;
-    }
-
-    public void setUpdateButton(Button updateButton) {
-        this.updateButton = updateButton;
-    }
-
-    public Button getDeleteButton() {
-        return deleteButton;
-    }
-
-    public void setDeleteButton(Button deleteButton) {
-        this.deleteButton = deleteButton;
-    }
-
-    public boolean isUpdate() {
-        return isUpdate;
-    }
-
-    public void setUpdate(boolean update) {
-        isUpdate = update;
     }
 
 }
