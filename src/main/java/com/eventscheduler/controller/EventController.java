@@ -1,3 +1,7 @@
+/**
+ The EventController class is responsible for handling user interactions and managing events in the event scheduler.
+ It controls the event creation window and communicates with the EventManager.
+ */
 package com.eventscheduler.controller;
 
 import com.eventscheduler.model.EventManager;
@@ -41,48 +45,12 @@ public class EventController implements Initializable {
     @FXML
     private TextArea descriptionTextArea;
 
-    @FXML
-    private void handleSubmit() {
-        String title = titleField.getText();
-        int hour = (int) hourSpinner.getValue();
-        int minute = (int) minuteSpinner.getValue();
-        LocalDateTime date = LocalDateTime.of(datePicker.getValue().getYear(), datePicker.getValue().getMonth(), datePicker.getValue().getDayOfMonth(), hour, minute);
-        Double duration = Double.parseDouble(timeField.getText());
-        String place = placeField.getText();
-        String description = descriptionTextArea.getText();
-        submitNewEvent(title, date, duration, place, description);
-    }
-
-    private void submitNewEvent(String title, LocalDateTime date, Double duration, String place, String description) {
-        EventModel newEvent = new EventModel(title, date, duration, place, description);
-        eventManager.addElement(newEvent);
-        logger.log(System.Logger.Level.INFO, "New event submitted");
-        closeEventWindow();
-    }
-
-    private void closeEventWindow() {
-        Stage stage = (Stage) handleSubmitButton.getScene().getWindow();
-        stage.close();
-        logger.log(System.Logger.Level.INFO, "Event window closed");
-    }
-
-    private void initSpinners() {
-        hourSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0, 1));
-        hourSpinner.setEditable(true);
-        hourSpinner.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                hourSpinner.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
-        minuteSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 55, 0, 5));
-        minuteSpinner.setEditable(true);
-        minuteSpinner.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                minuteSpinner.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
-    }
-
+    /**
+     * Initializes the controller.
+     *
+     * @param url            The URL location of the FXML file.
+     * @param resourceBundle The ResourceBundle for the FXML file.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Initialize spinners
@@ -102,6 +70,73 @@ public class EventController implements Initializable {
 
     }
 
+    /**
+     * Handles the submit button click event.
+     * Retrieves the entered event details from the form fields and submits a new event to the event manager.
+     */
+    @FXML
+    private void handleSubmit() {
+        String title = titleField.getText();
+        int hour = (int) hourSpinner.getValue();
+        int minute = (int) minuteSpinner.getValue();
+        LocalDateTime date = LocalDateTime.of(datePicker.getValue().getYear(), datePicker.getValue().getMonth(), datePicker.getValue().getDayOfMonth(), hour, minute);
+        Double duration = Double.parseDouble(timeField.getText());
+        String place = placeField.getText();
+        String description = descriptionTextArea.getText();
+        submitNewEvent(title, date, duration, place, description);
+    }
+
+    /**
+     * Submits a new event to the event manager.
+     *
+     * @param title       The title of the event.
+     * @param date        The date and time of the event.
+     * @param duration    The duration of the event.
+     * @param place       The place of the event.
+     * @param description The description of the event.
+     */
+    private void submitNewEvent(String title, LocalDateTime date, Double duration, String place, String description) {
+        EventModel newEvent = new EventModel(title, date, duration, place, description);
+        eventManager.addElement(newEvent);
+        logger.log(System.Logger.Level.INFO, "New event submitted");
+        closeEventWindow();
+    }
+
+    /**
+     * Closes the event creation window.
+     */
+    private void closeEventWindow() {
+        Stage stage = (Stage) handleSubmitButton.getScene().getWindow();
+        stage.close();
+        logger.log(System.Logger.Level.INFO, "Event window closed");
+    }
+
+    /**
+     * Initializes the hour and minute spinners with default values and custom value factories.
+     * Also adds listeners to restrict input to numeric values.
+     */
+    private void initSpinners() {
+        hourSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0, 1));
+        hourSpinner.setEditable(true);
+        hourSpinner.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                hourSpinner.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+        minuteSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 55, 0, 5));
+        minuteSpinner.setEditable(true);
+        minuteSpinner.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                minuteSpinner.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+    }
+
+    /**
+     * Sets the event manager for the controller.
+     *
+     * @param eventManager The EventManager instance.
+     */
     public void setEventManager(EventManager eventManager) {
         this.eventManager = eventManager;
     }

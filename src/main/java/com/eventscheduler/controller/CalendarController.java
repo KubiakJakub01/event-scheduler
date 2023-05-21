@@ -1,3 +1,8 @@
+/**
+ * Controller for the calendar view.
+ * Contains methods for drawing the calendar view.
+ * It also manages the event creation window and the event detail window.
+ */
 package com.eventscheduler.controller;
 
 import com.eventscheduler.model.EventManager;
@@ -30,9 +35,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-/**
- * Controller for CalendarView.fxml
- */
 public class CalendarController implements Initializable, Observer {
     private static final System.Logger logger = System.getLogger(EventModel.class.getName());
     private static final int MAX_EVENT_PER_DAY = 3;
