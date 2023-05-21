@@ -1,3 +1,8 @@
+/**
+ The ConnectionDB class represents a connection to a MongoDB database.
+ It provides methods to connect to the database, access the database and collection objects,
+ and close the database connection.
+ */
 package com.eventscheduler.model;
 
 import com.mongodb.ConnectionString;
@@ -25,7 +30,9 @@ public class ConnectionDB {
     private final MongoDatabase db;
     private final MongoCollection<EventModel> events;
 
-
+    /**
+     * Creates a new ConnectionDB object and establishes a connection to the MongoDB database.
+     */
     public ConnectionDB() {
         // Create connection to mongoDB
         logger.log(System.Logger.Level.INFO, "Creating connection to database");
@@ -48,12 +55,21 @@ public class ConnectionDB {
         logger.log(System.Logger.Level.INFO, "Collection " + documentName + " selected");
     }
 
+    /**
+     * Closes the connection to the MongoDB database.
+     */
     public void closeConnection() {
         logger.log(System.Logger.Level.INFO, "Closing connection to database");
         mongoClient.close();
         logger.log(System.Logger.Level.INFO, "Connection to database closed");
     }
 
+    /**
+     * Reads the properties file at the specified path and returns the properties as a Properties object.
+     *
+     * @param propertiesPath The path to the properties file.
+     * @return The Properties object containing the properties from the file.
+     */
     private Properties readPropertiesFile(String propertiesPath) {
         Properties dbProps = new Properties();
         try {
@@ -64,11 +80,20 @@ public class ConnectionDB {
         return dbProps;
     }
 
-
+    /**
+     * Returns the MongoDatabase object representing the selected database.
+     *
+     * @return The MongoDatabase object.
+     */
     public MongoDatabase getDatabase() {
         return db;
     }
 
+    /**
+     * Returns the MongoCollection object representing the selected collection.
+     *
+     * @return The MongoCollection object.
+     */
     public MongoCollection<EventModel> getEvents() {
         return events;
     }
