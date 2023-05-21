@@ -50,28 +50,49 @@ java --module-path <path-to-javafx-sdk> --add-modules javafx.controls,javafx.fxm
 
 ## Screenshots
 
-Main window of the Event Scheduler application is calendar view: 
+Main window of the Event Scheduler application is calendar view:
+
 ![Calendar view](images/calendar_view.png)
+
 The calendar view displays the current month and allows users to navigate between months.
-This view also shows the list of upcoming events: 
+This view also shows the list of upcoming events:
+
 ![Upcoming events view](images/upcoming_event_view.png)
-Users can click on '...' to view whole list of events in one day: 
+
+Users can click on '...' to view whole list of events in one day:
+
 ![Events in one day view](images/day_event_view.png)
-Users can click on 'Add event' to create a new event: 
-![Add event view](images/add_new_event.png).
-Event view contains form for creating new event: 
+
+Users can click on 'Add event' to create a new event:
+
+![Add event view](images/add_new_event.png)
+
+Event view contains form for creating new event:
+
 ![Event form view](images/add_new_event_view.png)
+
 After filling the form with proper data, user can click on 'Submit' to create new event: 
+
 ![New event view](images/filled_new_event.png)
+
 Automatically, new event will be added to the calendar view: 
+
 ![New event in calendar view](images/new_event_in_calendar_view.png)
+
 To view event details, user can click on any of the text with event: 
+
 ![Event details view](images/event_detail_view.png)
+
 In event view user can see event details and update or delete event: 
+
 ![Event details view](images/update_event_view.png)
-After updating event, user can see updated event in calendar view: 
+
+After updating event, user can see updated event in calendar view:
+
 ![Updated event in calendar view](images/updated_event_in_calendar_view.png)
-When the event begins, the application will display a notification: 
+
+When the event begins, the application will display a notification:
+
 ![Notification view](images/notification_view.png)
 
 ## The technology stack
