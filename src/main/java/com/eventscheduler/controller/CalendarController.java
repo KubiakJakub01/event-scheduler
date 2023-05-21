@@ -30,6 +30,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+/**
+ * Controller for CalendarView.fxml
+ */
 public class CalendarController implements Initializable, Observer {
     private static final System.Logger logger = System.getLogger(EventModel.class.getName());
     private static final int MAX_EVENT_PER_DAY = 3;
@@ -61,7 +64,12 @@ public class CalendarController implements Initializable, Observer {
     @FXML
     private Spinner eventLimitSpinner;
 
-
+    /**
+     * Initialize the calendar view
+     *
+     * @param url URL
+     * @param resourceBundle ResourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         dateFocus = LocalDateTime.now();
@@ -71,12 +79,20 @@ public class CalendarController implements Initializable, Observer {
         initTimeLabel();
     }
 
+    /**
+     * Update the calendar view
+     */
     @Override
     public void update() {
         drawCalendarView();
         logger.log(System.Logger.Level.INFO, "Calendar updated");
     }
 
+    /**
+     * Back one month
+     *
+     * @param event ActionEvent
+     */
     @FXML
     public void backOneMonth(ActionEvent event) {
         dateFocus = dateFocus.minusMonths(1);
@@ -84,6 +100,11 @@ public class CalendarController implements Initializable, Observer {
         drawCalendar();
     }
 
+    /**
+     * Forward one month
+     *
+     * @param event ActionEvent
+     */
     @FXML
     public void forwardOneMonth(ActionEvent event) {
         dateFocus = dateFocus.plusMonths(1);
@@ -91,6 +112,11 @@ public class CalendarController implements Initializable, Observer {
         drawCalendar();
     }
 
+    /**
+     * Open new event creation window
+     *
+     * @param event ActionEvent
+     */
     @FXML
     public void openNewEventWindow(ActionEvent event) {
         try {
@@ -110,6 +136,9 @@ public class CalendarController implements Initializable, Observer {
         }
     }
 
+    /**
+     * Init hour and minute spinner
+     */
     private void initSpinners() {
         // Init event limit spinner
         eventLimitSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, LIMIT_UPCOMING_EVENT));
@@ -120,6 +149,9 @@ public class CalendarController implements Initializable, Observer {
         eventLimitSpinner.setEditable(false);
     }
 
+    /**
+     * Init time label to display current time and update it every second
+     */
     private void initTimeLabel() {
         timeLabel.setStyle("-fx-font-size: 24px;");
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> updateTime()));
@@ -127,6 +159,9 @@ public class CalendarController implements Initializable, Observer {
         timeline.play();
     }
 
+    /**
+     * Update the time label with the current time
+     */
     private void updateTime() {
         // Get the current time
         LocalDateTime currentTime = LocalDateTime.now();
@@ -138,7 +173,11 @@ public class CalendarController implements Initializable, Observer {
         timeLabel.setText(formattedTime);
     }
 
-
+    /**
+     * Open the event detail window
+     *
+     * @param eventModel
+     */
     private void openDetailEventWindow(EventModel eventModel) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -157,11 +196,19 @@ public class CalendarController implements Initializable, Observer {
         }
     }
 
+    /**
+     * Init controller with event manager
+     *
+     * @param eventManager Manager for connecting to the event document in the database
+     */
     public void initController(EventManager eventManager) {
         this.eventManager = eventManager;
         drawCalendarView();
     }
 
+    /**
+     * Draw the calendar view with upcoming events and day events
+     */
     private void drawCalendarView() {
         drawCalendar();
         drawUpcomingEvents();
@@ -170,6 +217,9 @@ public class CalendarController implements Initializable, Observer {
         }
     }
 
+    /**
+     * Draw calendar with month and year
+     */
     private void drawCalendar() {
         calendar.getChildren().clear();
         year.setText(String.valueOf(dateFocus.getYear()));
@@ -228,6 +278,14 @@ public class CalendarController implements Initializable, Observer {
         }
     }
 
+    /**
+     * Create one day activity with a list of activities
+     *
+     * @param calendarActivities List of activities for a given day
+     * @param rectangleHeight   Height of the rectangle
+     * @param rectangleWidth   Width of the rectangle
+     * @param stackPane        StackPane to add the activity to
+     */
     private void createCalendarActivity(List<EventModel> calendarActivities, double rectangleHeight, double rectangleWidth, StackPane stackPane) {
         VBox calendarActivityBox = new VBox();
         for (int k = 0; k < calendarActivities.size(); k++) {
@@ -263,6 +321,13 @@ public class CalendarController implements Initializable, Observer {
         stackPane.getChildren().add(calendarActivityBox);
     }
 
+    /**
+     * Create a map of day and activities for a given month
+     * The key is the day of the month and the value is a list of activities for that day
+     *
+     * @param calendarActivities List of activities for a given month
+     * @return Map of day and activities for a given month
+     */
     private Map<Integer, List<EventModel>> createCalendarMap(List<EventModel> calendarActivities) {
         Map<Integer, List<EventModel>> calendarActivityMap = new HashMap<>();
 
@@ -281,6 +346,12 @@ public class CalendarController implements Initializable, Observer {
         return calendarActivityMap;
     }
 
+    /**
+     * Get all activities for a given month from the database
+     *
+     * @param dateFocus Date to focus on
+     * @return Map of day and activities for a given month
+     */
     private Map<Integer, List<EventModel>> getCalendarActivitiesMonth(LocalDateTime dateFocus) {
         int year = dateFocus.getYear();
         int month = dateFocus.getMonth().getValue();
@@ -290,16 +361,18 @@ public class CalendarController implements Initializable, Observer {
         return createCalendarMap(monthEventModelList);
     }
 
+    /**
+     * Create and show pane with upcoming events
+     * The pane is a list of events sorted by date. The number of events is limited by LIMIT_UPCOMING_EVENT
+     */
     private void drawUpcomingEvents() {
         eventListPane.getChildren().clear();
         ScrollPane scrollPane = new ScrollPane();
         VBox dayEventList = new VBox();
-        // Sort by date
         List<EventModel> eventModelList = eventManager.getNearestEvents(LIMIT_UPCOMING_EVENT);
 
         for (EventModel eventModel : eventModelList) {
             StringBuffer sb = new StringBuffer();
-            // Get date in format dd/MM/yyyy HH:mm
             sb.append(eventModel.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
             sb.append(": ");
             sb.append(eventModel.getPlace());
@@ -307,7 +380,6 @@ public class CalendarController implements Initializable, Observer {
             sb.append(eventModel.getDuration());
             Text text = new Text(sb.toString());
             dayEventList.getChildren().add(text);
-            // Add break line
             dayEventList.getChildren().add(new Text("\n"));
             text.setOnMouseClicked(mouseEvent -> {
                 //On Text clicked
@@ -315,13 +387,18 @@ public class CalendarController implements Initializable, Observer {
                 openDetailEventWindow(eventModel);
             });
         }
-        // Add scroll bar
         scrollPane.setPrefHeight(eventListPane.getPrefHeight());
         scrollPane.setPrefWidth(eventListPane.getPrefWidth());
         scrollPane.setContent(dayEventList);
         eventListPane.getChildren().add(scrollPane);
     }
 
+    /**
+     * Create and show pane with events for a given day
+     * The pane is a list of events sorted by date.
+     *
+     * @param dateFocus Date to focus on
+     */
     private void drawDayEvents(LocalDateTime dateFocus) {
         dayEventListPane.getChildren().clear();
         ScrollPane scrollPane = new ScrollPane();
