@@ -25,8 +25,46 @@ It allows users to view and modify event details, such as the date, time, locati
 
 * ConnectionDB: The ConnectionDB class is responsible for connecting to the mongoDB database.
 
+## Getting started
+
+To run the Event Scheduler application, you need to have Java 17 installed on your computer. 
+You can download the latest version of Java from the [official website](https://www.oracle.com/java/technologies/downloads/).
+
+You also need to have the JavaFX SDK installed on your computer.
+You can download the latest version of JavaFX from the [official website](https://gluonhq.com/products/javafx/).
+
+To get connected to the mongoDB database, you need to have a [mongoDB atlas](https://www.mongodb.com/atlas/database) account or a local mongoDB server running on your computer.
+You should also have a database named "EventScheduler" and a collection named "events" in your mongoDB database.
+To connect to the database, you need to create a file named "db.properties" in the "src/main/resources" directory.
+The file should contain the following information:
+
+```
+mongodb.uri=<your-mongodb-uri>
+```
+
+To run the application, you can use the following command:
+
+```
+java --module-path <path-to-javafx-sdk> --add-modules javafx.controls,javafx.fxml -jar EventScheduler.jar
+```
+
+## Screenshots
+
+Main window of the Event Scheduler application is calendar view: ![Calendar view](images/calendar_view.png)
+The calendar view displays the current month and allows users to navigate between months.
+This view also shows the list of upcoming events: ![Upcoming events view](images/upcoming_event_view.png)
+Users can click on '...' to view whole list of events in one day: ![Events in one day view](images/day_event_view.png)
+Users can click on 'Add event' to create a new event: ![Add event view](images/add_new_event.png).
+Event view contains form for creating new event: ![Event form view](images/add_new_event_view.png)
+After filling the form with proper data, user can click on 'Submit' to create new event: ![New event view](images/filled_new_event.png)
+Automatically, new event will be added to the calendar view: ![New event in calendar view](images/new_event_in_calendar_view.png)
+To view event details, user can click on any of the text with event: ![Event details view](images/event_detail_view.png)
+In event view user can see event details and update or delete event: ![Event details view](images/update_event_view.png)
+After updating event, user can see updated event in calendar view: ![Updated event in calendar view](images/updated_event_in_calendar_view.png)
+When the event begins, the application will display a notification: ![Notification view](images/notification_view.png)
+
 ## The technology stack
 
-This project is implemented with Java version 17 and JavaFX version 17.0.1. 
-The mongoDB database is used to store event data. Database connection is established using the mongo-java-driver version 4.9.0.
+This project is implemented with Java version 17 and JavaFX version 17.0.1.
+The mongoDB database is used to store event data. Database connection is established using the mongodb-java-driver version 4.9.0.
 The project is built using Maven. For more information about the dependencies, please refer to the pom.xml file.
