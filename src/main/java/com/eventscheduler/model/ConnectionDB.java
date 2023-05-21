@@ -49,6 +49,12 @@ public class ConnectionDB {
         logger.log(System.Logger.Level.INFO, "Collection " + documentName + " selected");
     }
 
+    public void closeConnection() {
+        logger.log(System.Logger.Level.INFO, "Closing connection to database");
+        mongoClient.close();
+        logger.log(System.Logger.Level.INFO, "Connection to database closed");
+    }
+
     private Properties readPropertiesFile(String propertiesPath) {
         Properties dbProps = new Properties();
         try {
