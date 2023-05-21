@@ -1,4 +1,5 @@
 package com.eventscheduler.controller;
+
 import com.eventscheduler.model.EventManager;
 import com.eventscheduler.model.EventModel;
 import javafx.animation.Animation;
@@ -109,7 +110,7 @@ public class CalendarController implements Initializable, Observer {
         }
     }
 
-    private void initSpinners(){
+    private void initSpinners() {
         // Init event limit spinner
         eventLimitSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, LIMIT_UPCOMING_EVENT));
         eventLimitSpinner.valueProperty().addListener((obs, oldValue, newValue) -> {
@@ -119,7 +120,7 @@ public class CalendarController implements Initializable, Observer {
         eventLimitSpinner.setEditable(false);
     }
 
-    private void initTimeLabel(){
+    private void initTimeLabel() {
         timeLabel.setStyle("-fx-font-size: 24px;");
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> updateTime()));
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -138,7 +139,7 @@ public class CalendarController implements Initializable, Observer {
     }
 
 
-    private void openDetailEventWindow(EventModel eventModel){
+    private void openDetailEventWindow(EventModel eventModel) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("/com/eventscheduler/EventDetailView.fxml"));
@@ -156,20 +157,20 @@ public class CalendarController implements Initializable, Observer {
         }
     }
 
-    public void initController(EventManager eventManager){
+    public void initController(EventManager eventManager) {
         this.eventManager = eventManager;
         drawCalendarView();
     }
 
-    private void drawCalendarView(){
+    private void drawCalendarView() {
         drawCalendar();
         drawUpcomingEvents();
-        if (selectedDate != null){
+        if (selectedDate != null) {
             drawDayEvents(selectedDate);
         }
     }
 
-    private void drawCalendar(){
+    private void drawCalendar() {
         calendar.getChildren().clear();
         year.setText(String.valueOf(dateFocus.getYear()));
         month.setText(String.valueOf(dateFocus.getMonth()));
@@ -185,10 +186,10 @@ public class CalendarController implements Initializable, Observer {
 
         int monthMaxDate = dateFocus.getMonth().maxLength();
         //Check for leap year
-        if(dateFocus.getYear() % 4 != 0 && monthMaxDate == 29){
+        if (dateFocus.getYear() % 4 != 0 && monthMaxDate == 29) {
             monthMaxDate = 28;
         }
-        int dateOffset = LocalDateTime.of(dateFocus.getYear(), dateFocus.getMonthValue(), 1,0,0,0,0).getDayOfWeek().getValue();
+        int dateOffset = LocalDateTime.of(dateFocus.getYear(), dateFocus.getMonthValue(), 1, 0, 0, 0, 0).getDayOfWeek().getValue();
 
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 7; j++) {
@@ -198,27 +199,27 @@ public class CalendarController implements Initializable, Observer {
                 rectangle.setFill(Color.TRANSPARENT);
                 rectangle.setStroke(Color.BLACK);
                 rectangle.setStrokeWidth(strokeWidth);
-                double rectangleWidth =(calendarWidth/7) - strokeWidth - spacingH;
+                double rectangleWidth = (calendarWidth / 7) - strokeWidth - spacingH;
                 rectangle.setWidth(rectangleWidth);
-                double rectangleHeight = (calendarHeight/6) - strokeWidth - spacingV;
+                double rectangleHeight = (calendarHeight / 6) - strokeWidth - spacingV;
                 rectangle.setHeight(rectangleHeight);
                 stackPane.getChildren().add(rectangle);
 
-                int calculatedDate = (j+1)+(7*i);
-                if(calculatedDate > dateOffset){
+                int calculatedDate = (j + 1) + (7 * i);
+                if (calculatedDate > dateOffset) {
                     int currentDate = calculatedDate - dateOffset;
-                    if(currentDate <= monthMaxDate){
+                    if (currentDate <= monthMaxDate) {
                         Text date = new Text(String.valueOf(currentDate));
-                        double textTranslationY = - (rectangleHeight / 2) * 0.75;
+                        double textTranslationY = -(rectangleHeight / 2) * 0.75;
                         date.setTranslateY(textTranslationY);
                         stackPane.getChildren().add(date);
 
                         List<EventModel> calendarActivities = calendarActivityMap.get(currentDate);
-                        if(calendarActivities != null){
+                        if (calendarActivities != null) {
                             createCalendarActivity(calendarActivities, rectangleHeight, rectangleWidth, stackPane);
                         }
                     }
-                    if(today.getYear() == dateFocus.getYear() && today.getMonth() == dateFocus.getMonth() && today.getDayOfMonth() == currentDate){
+                    if (today.getYear() == dateFocus.getYear() && today.getMonth() == dateFocus.getMonth() && today.getDayOfMonth() == currentDate) {
                         rectangle.setStroke(Color.BLUE);
                     }
                 }
@@ -230,7 +231,7 @@ public class CalendarController implements Initializable, Observer {
     private void createCalendarActivity(List<EventModel> calendarActivities, double rectangleHeight, double rectangleWidth, StackPane stackPane) {
         VBox calendarActivityBox = new VBox();
         for (int k = 0; k < calendarActivities.size(); k++) {
-            if(k >= 2) {
+            if (k >= 2) {
                 Text moreActivities = new Text("...");
                 calendarActivityBox.getChildren().add(moreActivities);
                 moreActivities.setOnMouseClicked(mouseEvent -> {
@@ -243,7 +244,7 @@ public class CalendarController implements Initializable, Observer {
             }
             StringBuffer sb = new StringBuffer();
             // Take maximal 8 characters for the place
-            sb.append(calendarActivities.get(k).getPlace().substring(0, Math.min(calendarActivities.get(k).getPlace().length(), 8)));
+            sb.append(calendarActivities.get(k).getPlace(), 0, Math.min(calendarActivities.get(k).getPlace().length(), 8));
             sb.append(", ");
             sb.append(calendarActivities.get(k).getDate().toLocalTime());
             Text text = new Text(sb.toString());
@@ -265,9 +266,9 @@ public class CalendarController implements Initializable, Observer {
     private Map<Integer, List<EventModel>> createCalendarMap(List<EventModel> calendarActivities) {
         Map<Integer, List<EventModel>> calendarActivityMap = new HashMap<>();
 
-        for (EventModel activity: calendarActivities) {
+        for (EventModel activity : calendarActivities) {
             int activityDate = activity.getDate().getDayOfMonth();
-            if(!calendarActivityMap.containsKey(activityDate)){
+            if (!calendarActivityMap.containsKey(activityDate)) {
                 calendarActivityMap.put(activityDate, List.of(activity));
             } else {
                 List<EventModel> OldListByDate = calendarActivityMap.get(activityDate);
@@ -277,7 +278,7 @@ public class CalendarController implements Initializable, Observer {
                 calendarActivityMap.put(activityDate, newList);
             }
         }
-        return  calendarActivityMap;
+        return calendarActivityMap;
     }
 
     private Map<Integer, List<EventModel>> getCalendarActivitiesMonth(LocalDateTime dateFocus) {
@@ -289,7 +290,7 @@ public class CalendarController implements Initializable, Observer {
         return createCalendarMap(monthEventModelList);
     }
 
-    private void drawUpcomingEvents(){
+    private void drawUpcomingEvents() {
         eventListPane.getChildren().clear();
         ScrollPane scrollPane = new ScrollPane();
         VBox dayEventList = new VBox();
@@ -321,7 +322,7 @@ public class CalendarController implements Initializable, Observer {
         eventListPane.getChildren().add(scrollPane);
     }
 
-    private void drawDayEvents(LocalDateTime dateFocus){
+    private void drawDayEvents(LocalDateTime dateFocus) {
         dayEventListPane.getChildren().clear();
         ScrollPane scrollPane = new ScrollPane();
         VBox dayEventList = new VBox();

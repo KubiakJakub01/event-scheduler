@@ -4,10 +4,14 @@ import java.util.List;
 
 public interface DBManager<Model> {
 
-    public void addElement(Model model);
-    public void removeElement(Model model);
-    public void updateElement(Model model, Model updatedModel);
-    public Model getElement(Model model);
-    public List<Model> getAllElements();
+    void addElement(Model model);
+
+    void removeElement(Model model);
+
+    void updateElement(Model model, Model updatedModel);
+
+    Model getElement(Model model);
+
+    List<Model> getAllElements();
 
 }

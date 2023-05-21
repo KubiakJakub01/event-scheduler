@@ -18,13 +18,12 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 public class ConnectionDB {
     private static final System.Logger logger = System.getLogger(ConnectionDB.class.getName());
-
-    private MongoClient mongoClient;
-    private MongoDatabase db;
-    private MongoCollection<EventModel> events;
     private static final String propertiesPath = "src/main/resources/db.properties";
     private static final String databaseName = "eventSchedulerDB";
     private static final String documentName = "events";
+    private final MongoClient mongoClient;
+    private final MongoDatabase db;
+    private final MongoCollection<EventModel> events;
 
 
     public ConnectionDB() {

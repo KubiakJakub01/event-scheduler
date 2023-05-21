@@ -13,9 +13,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
 
-public class EventManager implements DBManager<EventModel>{
+public class EventManager implements DBManager<EventModel> {
     private static final System.Logger logger = System.getLogger(EventManager.class.getName());
 
     MongoCollection<EventModel> events;
@@ -100,7 +101,7 @@ public class EventManager implements DBManager<EventModel>{
         return eventsList;
     }
 
-    public List<EventModel> getEventsByDay(int year, int month, int day){
+    public List<EventModel> getEventsByDay(int year, int month, int day) {
         // Create the start and end date of the day
         LocalDate startDate = LocalDate.of(year, month, day);
         LocalDate endDate = startDate.plusDays(1);

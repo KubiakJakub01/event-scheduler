@@ -3,30 +3,24 @@ package com.eventscheduler.controller;
 import com.eventscheduler.model.EventManager;
 import com.eventscheduler.model.EventModel;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
-import static java.lang.Thread.sleep;
 
 public class EventScheduler implements Observer {
     private static final System.Logger logger = System.getLogger(EventScheduler.class.getName());
 
     private ScheduledExecutorService scheduler;
-    private EventManager eventManager;
+    private final EventManager eventManager;
     private EventModel scheduledEvent;
     private Stage eventWindow;
 
@@ -86,7 +80,7 @@ public class EventScheduler implements Observer {
         logger.log(System.Logger.Level.INFO, "Scheduler shutdown");
     }
 
-    private void reloadScheduler(){
+    private void reloadScheduler() {
         // Reload the scheduler when the event is updated
         shutdownScheduler();
         scheduler = Executors.newSingleThreadScheduledExecutor();

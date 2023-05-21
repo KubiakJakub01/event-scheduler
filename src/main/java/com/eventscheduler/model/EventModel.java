@@ -18,6 +18,7 @@ public class EventModel implements Model {
 
     public EventModel() {
     }
+
     public EventModel(String title, LocalDateTime date, Double duration, String place, String description) {
         this.title = title;
         this.date = date;

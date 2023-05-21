@@ -67,13 +67,11 @@ public class EventDetailController implements Initializable {
             if (updatedEventModel.equals(eventModel)) {
                 logger.log(System.Logger.Level.INFO, "No changes detected");
                 cancelUpdate();
-            }
-            else {
+            } else {
                 updateEvent(updatedEventModel);
                 disableUpdateMode();
             }
-        }
-        else {
+        } else {
             closeDetailEventWindow();
         }
     }
@@ -84,8 +82,7 @@ public class EventDetailController implements Initializable {
         if (isUpdate) {
             disableUpdateMode();
             cancelUpdate();
-        }
-        else {
+        } else {
             enableUpdateMode();
         }
     }
@@ -97,7 +94,7 @@ public class EventDetailController implements Initializable {
         closeDetailEventWindow();
     }
 
-    private EventModel createEventModelFromComponents(){
+    private EventModel createEventModelFromComponents() {
         String title = titleField.getText();
         int hour = (int) hourSpinner.getValue();
         int minute = (int) minuteSpinner.getValue();
@@ -118,14 +115,14 @@ public class EventDetailController implements Initializable {
         fillComponentsWithData(eventModel);
     }
 
-    private void enableUpdateMode(){
+    private void enableUpdateMode() {
         setDisableComponents(false);
         isUpdate = true;
         updateButton.setText("Cancel");
         okButton.setText("Save");
     }
 
-    private void disableUpdateMode(){
+    private void disableUpdateMode() {
         setDisableComponents(true);
         isUpdate = false;
         updateButton.setText("Update");
@@ -183,7 +180,7 @@ public class EventDetailController implements Initializable {
         descriptionTextArea.setDisable(disable);
     }
 
-    private void setTimeField(){
+    private void setTimeField() {
         timeField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d{0,2}([\\.]\\d{0,1})?")) {
                 timeField.setText(oldValue);
