@@ -1,12 +1,16 @@
 package com.eventscheduler.controller;
 import com.eventscheduler.model.EventManager;
 import com.eventscheduler.model.EventModel;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
@@ -17,6 +21,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -41,6 +46,9 @@ public class CalendarController implements Initializable, Observer {
     private Text month;
 
     @FXML
+    private Label timeLabel;
+
+    @FXML
     private FlowPane calendar;
 
     @FXML
@@ -59,6 +67,7 @@ public class CalendarController implements Initializable, Observer {
         today = LocalDateTime.now();
         selectedDate = LocalDateTime.now();
         initSpinners();
+        initTimeLabel();
     }
 
     @Override
@@ -109,6 +118,25 @@ public class CalendarController implements Initializable, Observer {
         });
         eventLimitSpinner.setEditable(false);
     }
+
+    private void initTimeLabel(){
+        timeLabel.setStyle("-fx-font-size: 24px;");
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> updateTime()));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+    }
+
+    private void updateTime() {
+        // Get the current time
+        LocalDateTime currentTime = LocalDateTime.now();
+
+        // Format the time as HH:mm:ss
+        String formattedTime = currentTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+
+        // Update the label with the current time
+        timeLabel.setText(formattedTime);
+    }
+
 
     private void openDetailEventWindow(EventModel eventModel){
         try {
@@ -323,14 +351,6 @@ public class CalendarController implements Initializable, Observer {
         scrollPane.setPrefWidth(dayEventListPane.getPrefWidth());
         scrollPane.setContent(dayEventList);
         dayEventListPane.getChildren().add(scrollPane);
-    }
-
-    public EventManager getEventModel() {
-        return eventManager;
-    }
-
-    public void setEventModel(EventManager eventManager) {
-        this.eventManager = eventManager;
     }
 
 }
