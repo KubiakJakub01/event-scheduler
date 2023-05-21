@@ -1,8 +1,3 @@
-/**
- * Model class for Event.
- * Implements Model interface.
- * Represents an event with a title, date, duration, place, and description.
- */
 package com.eventscheduler.model;
 
 import org.bson.codecs.pojo.annotations.BsonId;
@@ -10,6 +5,11 @@ import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
 
+/**
+ * Model class for Event.
+ * Implements Model interface.
+ * Represents an event with a title, date, duration, place, and description.
+ */
 public class EventModel implements Model {
     private static final System.Logger logger = System.getLogger(EventModel.class.getName());
 

@@ -1,11 +1,11 @@
-/**
-    EventObservable class for Observer Pattern
- */
 package com.eventscheduler.controller;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * EventObservable class for Observer Pattern
+ */
 public class EventObservable implements Observable {
     private static final System.Logger logger = System.getLogger(EventObservable.class.getName());
     private final List<Observer> observers;

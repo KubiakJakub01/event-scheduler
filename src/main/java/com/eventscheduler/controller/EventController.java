@@ -1,7 +1,3 @@
-/**
- The EventController class is responsible for handling user interactions and managing events in the event scheduler.
- It controls the event creation window and communicates with the EventManager.
- */
 package com.eventscheduler.controller;
 
 import com.eventscheduler.model.EventManager;
@@ -16,6 +12,10 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
+/**
+ * The EventController class is responsible for handling user interactions and managing events in the event scheduler.
+ * It controls the event creation window and communicates with the EventManager.
+ */
 public class EventController implements Initializable {
     System.Logger logger = System.getLogger(EventController.class.getName());
 

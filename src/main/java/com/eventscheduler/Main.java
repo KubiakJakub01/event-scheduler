@@ -13,6 +13,10 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * The main class for the Event Scheduler application.
+ * This class extends the JavaFX Application class and serves as the entry point for the application.
+ */
 public class Main extends Application {
 
     private CalendarController calendarController;
@@ -21,6 +25,21 @@ public class Main extends Application {
     private EventObservable eventObservable;
     private EventScheduler eventScheduler;
 
+    /**
+     * The main method that launches the JavaFX application.
+     *
+     * @param args Command-line arguments.
+     */
+    public static void main(String[] args) {
+        launch();
+    }
+
+    /**
+     * The start method called when the JavaFX application is launched.
+     *
+     * @param stage The primary stage for the application.
+     * @throws IOException If an error occurs while loading the FXML file.
+     */
     @Override
     public void start(Stage stage) throws IOException {
         initDBConnection();
@@ -41,11 +60,17 @@ public class Main extends Application {
         stage.show();
     }
 
+    /**
+     * Initializes the database connection.
+     */
     public void initDBConnection() {
         connectionDB = new ConnectionDB();
         eventManager = new EventManager(connectionDB.getEvents(), eventObservable);
     }
 
+    /**
+     * Initializes the dependencies of the application.
+     */
     public void initDependencies() {
         eventObservable = new EventObservable();
         initDBConnection();
@@ -55,11 +80,10 @@ public class Main extends Application {
         eventObservable.addObserver(calendarController);
     }
 
+    /**
+     * Closes the database connection.
+     */
     public void closeDBConnection() {
         connectionDB.closeConnection();
-    }
-
-    public static void main(String[] args) {
-        launch();
     }
 }

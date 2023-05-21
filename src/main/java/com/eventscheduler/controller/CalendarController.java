@@ -1,8 +1,3 @@
-/**
- * Controller for the calendar view.
- * Contains methods for drawing the calendar view.
- * It also manages the event creation window and the event detail window.
- */
 package com.eventscheduler.controller;
 
 import com.eventscheduler.model.EventManager;
@@ -35,6 +30,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+/**
+ * Controller for the calendar view.
+ * Contains methods for drawing the calendar view.
+ * It also manages the event creation window and the event detail window.
+ */
 public class CalendarController implements Initializable, Observer {
     private static final System.Logger logger = System.getLogger(EventModel.class.getName());
     private static final int MAX_EVENT_PER_DAY = 3;
@@ -69,7 +69,7 @@ public class CalendarController implements Initializable, Observer {
     /**
      * Initialize the calendar view
      *
-     * @param url URL
+     * @param url            URL
      * @param resourceBundle ResourceBundle
      */
     @Override
@@ -284,9 +284,9 @@ public class CalendarController implements Initializable, Observer {
      * Create one day activity with a list of activities
      *
      * @param calendarActivities List of activities for a given day
-     * @param rectangleHeight   Height of the rectangle
-     * @param rectangleWidth   Width of the rectangle
-     * @param stackPane        StackPane to add the activity to
+     * @param rectangleHeight    Height of the rectangle
+     * @param rectangleWidth     Width of the rectangle
+     * @param stackPane          StackPane to add the activity to
      */
     private void createCalendarActivity(List<EventModel> calendarActivities, double rectangleHeight, double rectangleWidth, StackPane stackPane) {
         VBox calendarActivityBox = new VBox();

@@ -1,7 +1,3 @@
-/**
- The EventDetailController class is responsible for handling user interactions and managing event details in the event scheduler.
- It controls the event detail window and communicates with the EventManager.
- */
 package com.eventscheduler.controller;
 
 import com.eventscheduler.model.EventManager;
@@ -16,6 +12,10 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
+/**
+ * The EventDetailController class is responsible for handling user interactions and managing event details in the event scheduler.
+ * It controls the event detail window and communicates with the EventManager.
+ */
 public class EventDetailController implements Initializable {
     System.Logger logger = System.getLogger(EventController.class.getName());
 
@@ -237,7 +237,7 @@ public class EventDetailController implements Initializable {
     /**
      * Set disable property of all form components.
      *
-     * @param disable   If disable
+     * @param disable If disable
      */
     private void setDisableComponents(boolean disable) {
         titleField.setDisable(disable);

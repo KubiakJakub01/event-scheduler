@@ -1,8 +1,3 @@
-/**
- The EventManager class is responsible for managing events in the MongoDB database.
- It implements the DBManager interface and provides methods to add, remove, update, and retrieve events from the database.
- It also provides methods to retrieve events based on specific criteria such as month, day, and nearest events.
- */
 package com.eventscheduler.model;
 
 import com.eventscheduler.controller.EventObservable;
@@ -21,6 +16,11 @@ import java.util.List;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 
+/**
+ * The EventManager class is responsible for managing events in the MongoDB database.
+ * It implements the DBManager interface and provides methods to add, remove, update, and retrieve events from the database.
+ * It also provides methods to retrieve events based on specific criteria such as month, day, and nearest events.
+ */
 public class EventManager implements DBManager<EventModel> {
     private static final System.Logger logger = System.getLogger(EventManager.class.getName());
 
@@ -30,7 +30,7 @@ public class EventManager implements DBManager<EventModel> {
     /**
      * Constructs an EventManager object with the specified MongoCollection and EventObservable.
      *
-     * @param events           The MongoCollection representing the events collection in the database.
+     * @param events          The MongoCollection representing the events collection in the database.
      * @param eventObservable The EventObservable object to notify observers of changes in events.
      */
     public EventManager(MongoCollection<EventModel> events, EventObservable eventObservable) {

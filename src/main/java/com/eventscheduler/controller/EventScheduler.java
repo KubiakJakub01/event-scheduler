@@ -1,7 +1,3 @@
-/**
- The EventScheduler class is responsible for scheduling and managing events.
- It implements the Observer interface to receive updates when the event list is updated.
- */
 package com.eventscheduler.controller;
 
 import com.eventscheduler.model.EventManager;
@@ -20,11 +16,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * The EventScheduler class is responsible for scheduling and managing events.
+ * It implements the Observer interface to receive updates when the event list is updated.
+ */
 public class EventScheduler implements Observer {
     private static final System.Logger logger = System.getLogger(EventScheduler.class.getName());
-
-    private ScheduledExecutorService scheduler;
     private final EventManager eventManager;
+    private ScheduledExecutorService scheduler;
     private EventModel scheduledEvent;
     private Stage eventWindow;
 

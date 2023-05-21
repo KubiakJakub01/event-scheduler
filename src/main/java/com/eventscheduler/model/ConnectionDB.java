@@ -1,8 +1,3 @@
-/**
- The ConnectionDB class represents a connection to a MongoDB database.
- It provides methods to connect to the database, access the database and collection objects,
- and close the database connection.
- */
 package com.eventscheduler.model;
 
 import com.mongodb.ConnectionString;
@@ -21,6 +16,11 @@ import java.util.Properties;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
+/**
+ * The ConnectionDB class represents a connection to a MongoDB database.
+ * It provides methods to connect to the database, access the database and collection objects,
+ * and close the database connection.
+ */
 public class ConnectionDB {
     private static final System.Logger logger = System.getLogger(ConnectionDB.class.getName());
     private static final String propertiesPath = "src/main/resources/db.properties";

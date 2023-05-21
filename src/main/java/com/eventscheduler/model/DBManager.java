@@ -1,11 +1,12 @@
-/**
- * Interface for the database manager
- * @param <Model> The model to be managed
- */
 package com.eventscheduler.model;
 
 import java.util.List;
 
+/**
+ * Interface for the database manager
+ *
+ * @param <Model> The model to be managed
+ */
 public interface DBManager<Model> {
 
     /**
