@@ -42,7 +42,10 @@
             <Insets right="9.0" />
         </padding>
     </HBox>
-   <Button fx:id="openEventWindowButton" layoutX="544.0" layoutY="24.0" mnemonicParsing="false" onAction="#openNewEventWindow" text="add new event " />
+   <Button fx:id="openEventWindowButton" layoutX="544.0" layoutY="24.0" mnemonicParsing="false" onAction="#openNewEventWindow" text="Add event ">
+      <font>
+         <Font name="Comic Sans MS" size="14.0" />
+      </font></Button>
    <FlowPane fx:id="dayEventListPane" layoutX="22.0" layoutY="615.0" prefHeight="133.0" prefWidth="716.0" />
    <FlowPane fx:id="eventListPane" layoutX="774.0" layoutY="122.0" prefHeight="498.0" prefWidth="212.0" />
    <HBox alignment="CENTER" layoutX="778.0" layoutY="75.0" prefHeight="44.0" prefWidth="212.0">
