@@ -24,6 +24,15 @@ public class EventModel implements Model {
     public EventModel() {
     }
 
+    /**
+     * Constructs an EventModel object with the specified title, date, duration, place, and description.
+     *
+     * @param title
+     * @param date
+     * @param duration
+     * @param place
+     * @param description
+     */
     public EventModel(String title, LocalDateTime date, Double duration, String place, String description) {
         this.title = title;
         this.date = date;
