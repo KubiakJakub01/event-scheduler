@@ -1,0 +1,4 @@
+module:com.example.eventscheduler
+com.eventscheduler
+com.eventscheduler.controller
+com.eventscheduler.model
