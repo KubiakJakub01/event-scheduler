@@ -1,5 +1,6 @@
 package com.eventscheduler.model;
 
+import com.eventscheduler.controller.EventObservable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
@@ -8,6 +9,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,21 +19,25 @@ public class EventManager implements DBManager<EventModel>{
     private static final System.Logger logger = System.getLogger(EventManager.class.getName());
 
     MongoCollection<EventModel> events;
+    EventObservable eventObservable;
 
-    public EventManager(MongoCollection<EventModel> events) {
+    public EventManager(MongoCollection<EventModel> events, EventObservable eventObservable) {
         this.events = events;
+        this.eventObservable = eventObservable;
     }
 
     @Override
     public void addElement(EventModel event) {
         events.insertOne(event);
         logger.log(System.Logger.Level.INFO, "Event " + event.getTitle() + " added to database");
+        eventObservable.notifyObservers();
     }
 
     @Override
     public void removeElement(EventModel event) {
-        events.deleteOne((Bson) event);
-        logger.log(System.Logger.Level.INFO, "Event " + event.getTitle() + " deleted from database");
+        events.deleteOne(eq("_id", event.getId()));
+        logger.log(System.Logger.Level.INFO, "Event " + event.getTitle() + " removed from database");
+        eventObservable.notifyObservers();
     }
 
     @Override
@@ -39,6 +45,7 @@ public class EventManager implements DBManager<EventModel>{
         Bson filter = Filters.eq("_id", event.getId());
         events.updateOne(filter, new Document("$set", updatedEvent));
         logger.log(System.Logger.Level.INFO, "Event " + event.getTitle() + " updated in database");
+        eventObservable.notifyObservers();
     }
 
 
@@ -78,9 +85,11 @@ public class EventManager implements DBManager<EventModel>{
                 ))
         );
 
+        Bson sort = Sorts.ascending("date");
+
         // Retrieve the events matching the filter
         List<EventModel> eventsList = new ArrayList<>();
-        try (MongoCursor<EventModel> cursor = events.find(filter).iterator()) {
+        try (MongoCursor<EventModel> cursor = events.find(filter).sort(sort).iterator()) {
             while (cursor.hasNext()) {
                 eventsList.add(cursor.next());
             }
@@ -137,7 +146,7 @@ public class EventManager implements DBManager<EventModel>{
         // Create the query filter
         Bson filter = and(
                 eq("$expr", and(
-                        eq("$gte", List.of("$date", LocalDate.now().atStartOfDay()))
+                        eq("$gte", List.of("$date", LocalDateTime.now()))
                 ))
         );
 
@@ -155,4 +164,5 @@ public class EventManager implements DBManager<EventModel>{
 
         return eventsList;
     }
+
 }
