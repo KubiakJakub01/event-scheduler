@@ -99,7 +99,6 @@ public class EventController implements Initializable {
      */
     private void submitNewEvent(String title, LocalDateTime date, Double duration, String place, String description) {
         EventModel newEvent = new EventModel(title, date, duration, place, description);
-//        eventManager.addElement(newEvent);
         CRUDOperationExecutor crudOperationExecutor = new CRUDOperationExecutor(eventManager);
         crudOperationExecutor.addWithProgress(newEvent);
         logger.log(System.Logger.Level.INFO, "New event submitted");
