@@ -126,7 +126,7 @@ public class CalendarController implements Initializable, Observer {
             fxmlLoader.setLocation(getClass().getResource("/com/eventscheduler/EventForm.fxml"));
             Parent root = fxmlLoader.load();
             EventController eventController = fxmlLoader.getController();
-            eventController.setEventManager(eventManager);
+            eventController.initController(eventManager);
             Scene scene = new Scene(root, 600, 400);
             Stage stage = new Stage();
             stage.setTitle("Add new event");
