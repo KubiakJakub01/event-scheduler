@@ -1,5 +1,6 @@
 package com.eventscheduler.controller;
 
+import com.eventscheduler.model.CRUDOperationExecutor;
 import com.eventscheduler.model.EventManager;
 import com.eventscheduler.model.EventModel;
 import javafx.beans.binding.BooleanBinding;
@@ -20,6 +21,7 @@ public class EventController implements Initializable {
     System.Logger logger = System.getLogger(EventController.class.getName());
 
     private EventManager eventManager;
+    private CRUDOperationExecutor crudOperationExecutor;
 
     @FXML
     private TextField titleField;
@@ -97,7 +99,8 @@ public class EventController implements Initializable {
      */
     private void submitNewEvent(String title, LocalDateTime date, Double duration, String place, String description) {
         EventModel newEvent = new EventModel(title, date, duration, place, description);
-        eventManager.addElement(newEvent);
+        CRUDOperationExecutor crudOperationExecutor = new CRUDOperationExecutor(eventManager);
+        crudOperationExecutor.addWithProgress(newEvent);
         logger.log(System.Logger.Level.INFO, "New event submitted");
         closeEventWindow();
     }
@@ -137,7 +140,8 @@ public class EventController implements Initializable {
      *
      * @param eventManager The EventManager instance.
      */
-    public void setEventManager(EventManager eventManager) {
+    public void initController(EventManager eventManager) {
         this.eventManager = eventManager;
+        this.crudOperationExecutor = new CRUDOperationExecutor(eventManager);
     }
 }

@@ -1,5 +1,6 @@
 package com.eventscheduler.controller;
 
+import com.eventscheduler.model.CRUDOperationExecutor;
 import com.eventscheduler.model.EventManager;
 import com.eventscheduler.model.EventModel;
 import javafx.event.ActionEvent;
@@ -22,6 +23,7 @@ public class EventDetailController implements Initializable {
     private EventManager eventManager;
     private EventModel eventModel;
     private boolean isUpdate = false;
+    CRUDOperationExecutor crudOperationExecutor;
 
     @FXML
     private TextField titleField;
@@ -118,7 +120,7 @@ public class EventDetailController implements Initializable {
     @FXML
     private void handleDelete(ActionEvent event) {
         logger.log(System.Logger.Level.INFO, "Delete button pressed");
-        eventManager.removeElement(eventModel);
+        crudOperationExecutor.deleteWithProgress(eventModel);
         closeDetailEventWindow();
     }
 
@@ -145,7 +147,7 @@ public class EventDetailController implements Initializable {
      */
     private void updateEvent(EventModel updatedEventModel) {
         logger.log(System.Logger.Level.INFO, "Send request to update event");
-        eventManager.updateElement(eventModel, updatedEventModel);
+        crudOperationExecutor.updateWithProgress(eventModel, updatedEventModel);
     }
 
     /**
@@ -193,6 +195,7 @@ public class EventDetailController implements Initializable {
      */
     public void initController(EventManager eventManager, EventModel eventModel) {
         this.eventManager = eventManager;
+        crudOperationExecutor = new CRUDOperationExecutor(eventManager);
         if (eventModel != null) {
             fillComponentsWithData(eventModel);
         }
