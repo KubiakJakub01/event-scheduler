@@ -37,8 +37,8 @@ public class CRUDOperationExecutor {
             }
             progressWindow.closeWindow();
         });
-        eventManager.addElement(event);
         thread.start();
+        eventManager.addElement(event);
     }
 
     /**
@@ -61,8 +61,8 @@ public class CRUDOperationExecutor {
             }
             progressWindow.closeWindow();
         });
-        eventManager.removeElement(event);
         thread.start();
+        eventManager.removeElement(event);
     }
 
     /**
@@ -86,7 +86,7 @@ public class CRUDOperationExecutor {
             }
             progressWindow.closeWindow();
         });
-        eventManager.updateElement(event, updatedEvent);
         thread.start();
+        eventManager.updateElement(event, updatedEvent);
     }
 }
