@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -34,9 +35,15 @@ public class EventScheduler implements Observer {
      */
     public EventScheduler(EventManager eventManager) {
         this.eventManager = eventManager;
-        this.scheduledEvent = eventManager.getNearestEvents(1).get(0);
-        this.scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduleEvent(scheduledEvent);
+        List<EventModel> tempScheduledEvents = eventManager.getNearestEvents(1);
+        if (tempScheduledEvents != null) {
+            this.scheduledEvent = tempScheduledEvents.get(0);
+            this.scheduler = Executors.newSingleThreadScheduledExecutor();
+            scheduleEvent(scheduledEvent);
+        }
+        else {
+            logger.log(System.Logger.Level.INFO, "No events to schedule");
+        }
     }
 
     /**
@@ -115,7 +122,12 @@ public class EventScheduler implements Observer {
      * Schedules the next event based on the nearest upcoming event in the event list.
      */
     private void scheduleNextEvent() {
-        EventModel nextEvent = eventManager.getNearestEvents(1).get(0);
+        List<EventModel> tempScheduledEvents = eventManager.getNearestEvents(1);
+        if (tempScheduledEvents == null) {
+            logger.log(System.Logger.Level.INFO, "No events to schedule");
+            return;
+        }
+        EventModel nextEvent = tempScheduledEvents.get(0);
         this.scheduledEvent = nextEvent;
         scheduleEvent(nextEvent);
     }
@@ -126,7 +138,12 @@ public class EventScheduler implements Observer {
     @Override
     public void update() {
         // Update the scheduler when the event list is updated
-        EventModel newEvent = eventManager.getNearestEvents(1).get(0);
+        List<EventModel> tempScheduledEvents = eventManager.getNearestEvents(1);
+        if (tempScheduledEvents == null) {
+            logger.log(System.Logger.Level.INFO, "No events to schedule");
+            return;
+        }
+        EventModel newEvent = tempScheduledEvents.get(0);
         if (this.scheduledEvent.equals(newEvent)) {
             logger.log(System.Logger.Level.INFO, "Event already scheduled");
             return;
