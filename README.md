@@ -1,5 +1,15 @@
 # event-scheduler
 
+## Table of contents
+
+* [Overview](#overview)
+* [Getting started](#getting-started)
+* [Screenshots](#screenshots)
+* [The technology stack](#the-technology-stack)
+* [Architecture](#architecture)
+  * [Diagrams](#diagrams)
+  * [Documentation](#documentation)
+
 ## Overview
 
 The Event Scheduler project is a simple software application designed to help users manage their events and schedules effectively. It provides a user-friendly interface for creating, viewing, and managing events in a calendar format. The project is implemented using Java and JavaFX for the graphical user interface.
