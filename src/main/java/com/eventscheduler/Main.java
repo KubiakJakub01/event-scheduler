@@ -23,7 +23,6 @@ public class Main extends Application {
     private ConnectionDB connectionDB;
     private EventManager eventManager;
     private EventObservable eventObservable;
-    private EventScheduler eventScheduler;
 
     /**
      * The main method that launches the JavaFX application.
@@ -74,7 +73,7 @@ public class Main extends Application {
     public void initDependencies() {
         eventObservable = new EventObservable();
         initDBConnection();
-        eventScheduler = new EventScheduler(eventManager);
+        EventScheduler eventScheduler = new EventScheduler(eventManager);
         calendarController.initController(eventManager);
         eventObservable.addObserver(eventScheduler);
         eventObservable.addObserver(calendarController);
