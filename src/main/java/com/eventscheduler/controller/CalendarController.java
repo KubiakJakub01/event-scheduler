@@ -46,16 +46,16 @@ public class CalendarController implements Initializable, Observer {
     private LocalDateTime selectedDate;
 
     @FXML
-    private Text year;
+    private Text yearText;
 
     @FXML
-    private Text month;
+    private Text monthText;
 
     @FXML
     private Label timeLabel;
 
     @FXML
-    private FlowPane calendar;
+    private FlowPane calendarPane;
 
     @FXML
     private FlowPane eventListPane;
@@ -98,7 +98,7 @@ public class CalendarController implements Initializable, Observer {
     @FXML
     public void backOneMonth(ActionEvent event) {
         dateFocus = dateFocus.minusMonths(1);
-        calendar.getChildren().clear();
+        calendarPane.getChildren().clear();
         drawCalendar();
     }
 
@@ -110,7 +110,7 @@ public class CalendarController implements Initializable, Observer {
     @FXML
     public void forwardOneMonth(ActionEvent event) {
         dateFocus = dateFocus.plusMonths(1);
-        calendar.getChildren().clear();
+        calendarPane.getChildren().clear();
         drawCalendar();
     }
 
@@ -223,15 +223,15 @@ public class CalendarController implements Initializable, Observer {
      * Draw calendar with month and year
      */
     private void drawCalendar() {
-        calendar.getChildren().clear();
-        year.setText(String.valueOf(dateFocus.getYear()));
-        month.setText(String.valueOf(dateFocus.getMonth()));
+        calendarPane.getChildren().clear();
+        yearText.setText(String.valueOf(dateFocus.getYear()));
+        monthText.setText(String.valueOf(dateFocus.getMonth()));
 
-        double calendarWidth = calendar.getPrefWidth();
-        double calendarHeight = calendar.getPrefHeight();
+        double calendarWidth = calendarPane.getPrefWidth();
+        double calendarHeight = calendarPane.getPrefHeight();
         double strokeWidth = 1;
-        double spacingH = calendar.getHgap();
-        double spacingV = calendar.getVgap();
+        double spacingH = calendarPane.getHgap();
+        double spacingV = calendarPane.getVgap();
 
         //List of activities for a given month
         Map<Integer, List<EventModel>> calendarActivityMap = getCalendarActivitiesMonth(dateFocus);
@@ -275,7 +275,7 @@ public class CalendarController implements Initializable, Observer {
                         rectangle.setStroke(Color.BLUE);
                     }
                 }
-                calendar.getChildren().add(stackPane);
+                calendarPane.getChildren().add(stackPane);
             }
         }
     }

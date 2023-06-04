@@ -60,7 +60,6 @@ public class EventManager implements DBManager<EventModel> {
         eventObservable.notifyObservers();
     }
 
-
     @Override
     public EventModel getElement(EventModel event) {
         logger.log(System.Logger.Level.INFO, "Getting event " + event.getTitle() + " from database");
