@@ -1,5 +1,6 @@
 package com.eventscheduler.controller;
 
+import com.eventscheduler.controller.utils.FXMLViewLoaderUtils;
 import com.eventscheduler.model.EventManager;
 import com.eventscheduler.model.EventModel;
 import javafx.animation.Animation;
@@ -44,6 +45,7 @@ public class CalendarController implements Initializable, Observer {
     private LocalDateTime dateFocus;
     private LocalDateTime today;
     private LocalDateTime selectedDate;
+    private FXMLViewLoaderUtils fxmlViewLoaderUtils;
 
     @FXML
     private Text yearText;
@@ -79,6 +81,7 @@ public class CalendarController implements Initializable, Observer {
         selectedDate = LocalDateTime.now();
         initSpinners();
         initTimeLabel();
+        fxmlViewLoaderUtils = new FXMLViewLoaderUtils();
     }
 
     /**
@@ -121,21 +124,7 @@ public class CalendarController implements Initializable, Observer {
      */
     @FXML
     public void openNewEventWindow(ActionEvent event) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("/com/eventscheduler/EventForm.fxml"));
-            Parent root = fxmlLoader.load();
-            EventController eventController = fxmlLoader.getController();
-            eventController.initController(eventManager);
-            Scene scene = new Scene(root, 600, 400);
-            Stage stage = new Stage();
-            stage.setTitle("Add new event");
-            stage.setScene(scene);
-            stage.show();
-            logger.log(System.Logger.Level.INFO, "Event window opened");
-        } catch (IOException e) {
-            logger.log(System.Logger.Level.ERROR, e.getMessage());
-        }
+        fxmlViewLoaderUtils.openNewEventWindow(eventManager);
     }
 
     /**
@@ -181,21 +170,7 @@ public class CalendarController implements Initializable, Observer {
      * @param eventModel
      */
     private void openDetailEventWindow(EventModel eventModel) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("/com/eventscheduler/EventDetailView.fxml"));
-            Parent root = fxmlLoader.load();
-            EventDetailController eventDetailController = fxmlLoader.getController();
-            eventDetailController.initController(eventManager, eventModel);
-            Scene scene = new Scene(root, 600, 400);
-            Stage stage = new Stage();
-            stage.setTitle("Event detail");
-            stage.setScene(scene);
-            stage.show();
-            logger.log(System.Logger.Level.INFO, "Event detail window opened");
-        } catch (IOException e) {
-            logger.log(System.Logger.Level.ERROR, e.getMessage());
-        }
+        fxmlViewLoaderUtils.openDetailEventWindow(eventModel, eventManager);
     }
 
     /**
