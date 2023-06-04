@@ -1,5 +1,6 @@
 package com.eventscheduler.model;
 
+import com.eventscheduler.model.dockument.EventModel;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
@@ -26,6 +27,7 @@ public class ConnectionDB {
     private static final String propertiesPath = "src/main/resources/db.properties";
     private static final String databaseName = "eventSchedulerDB";
     private static final String documentName = "events";
+    private static ConnectionDB instance;
     private final MongoClient mongoClient;
     private final MongoDatabase db;
     private final MongoCollection<EventModel> events;
@@ -33,7 +35,7 @@ public class ConnectionDB {
     /**
      * Creates a new ConnectionDB object and establishes a connection to the MongoDB database.
      */
-    public ConnectionDB() {
+    private ConnectionDB() {
         // Create connection to mongoDB
         logger.log(System.Logger.Level.INFO, "Creating connection to database");
         Properties properties = readPropertiesFile(propertiesPath);
@@ -53,6 +55,22 @@ public class ConnectionDB {
         logger.log(System.Logger.Level.INFO, "Database " + databaseName + " selected");
         this.events = db.getCollection(documentName, EventModel.class);
         logger.log(System.Logger.Level.INFO, "Collection " + documentName + " selected");
+    }
+
+    /**
+     * Returns the instance of ConnectionDB (Singleton pattern).
+     *
+     * @return The instance of ConnectionDB.
+     */
+    public static ConnectionDB getInstance() {
+        if (instance == null) {
+            synchronized (ConnectionDB.class) {
+                if (instance == null) {
+                    instance = new ConnectionDB();
+                }
+            }
+        }
+        return instance;
     }
 
     /**

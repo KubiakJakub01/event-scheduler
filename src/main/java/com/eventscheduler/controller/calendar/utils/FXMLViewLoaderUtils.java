@@ -1,10 +1,9 @@
-package com.eventscheduler.controller.utils;
+package com.eventscheduler.controller.calendar.utils;
 
-import com.eventscheduler.controller.EventController;
-import com.eventscheduler.controller.EventDetailController;
-import com.eventscheduler.model.EventManager;
-import com.eventscheduler.model.EventModel;
-import javafx.event.ActionEvent;
+import com.eventscheduler.controller.event.EventController;
+import com.eventscheduler.controller.event.EventDetailController;
+import com.eventscheduler.model.dao.EventManager;
+import com.eventscheduler.model.dockument.EventModel;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,9 +12,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class FXMLViewLoaderUtils {
-    private System.Logger logger = System.getLogger(FXMLViewLoaderUtils.class.getName());
-
     private static final String FXML_RESOURCE_PATH = "/com/eventscheduler/";
+    private System.Logger logger = System.getLogger(FXMLViewLoaderUtils.class.getName());
 
     private FXMLLoader getFXMLLoader(String fxmlFileName) {
         String fxmlFilePath = FXML_RESOURCE_PATH + fxmlFileName;

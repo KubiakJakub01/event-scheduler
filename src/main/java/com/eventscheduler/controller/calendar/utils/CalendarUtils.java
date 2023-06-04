@@ -1,7 +1,7 @@
-package com.eventscheduler.controller.utils;
+package com.eventscheduler.controller.calendar.utils;
 
-import com.eventscheduler.controller.CalendarController;
-import com.eventscheduler.model.EventModel;
+import com.eventscheduler.controller.calendar.CalendarController;
+import com.eventscheduler.model.dockument.EventModel;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -20,9 +20,10 @@ public class CalendarUtils {
 
     private CalendarController calendarController;
 
-    public CalendarUtils(CalendarController calendarController){
+    public CalendarUtils(CalendarController calendarController) {
         this.calendarController = calendarController;
     }
+
     /**
      * Draw calendar with month and year
      */

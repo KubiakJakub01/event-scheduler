@@ -1,10 +1,10 @@
 package com.eventscheduler;
 
-import com.eventscheduler.controller.CalendarController;
-import com.eventscheduler.controller.EventObservable;
-import com.eventscheduler.controller.EventScheduler;
+import com.eventscheduler.controller.calendar.CalendarController;
+import com.eventscheduler.controller.event.utils.EventObservable;
+import com.eventscheduler.controller.event.utils.EventScheduler;
 import com.eventscheduler.model.ConnectionDB;
-import com.eventscheduler.model.EventManager;
+import com.eventscheduler.model.dao.EventManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -63,7 +63,7 @@ public class Main extends Application {
      * Initializes the database connection.
      */
     public void initDBConnection() {
-        connectionDB = new ConnectionDB();
+        connectionDB = ConnectionDB.getInstance();
         eventManager = new EventManager(connectionDB.getEvents(), eventObservable);
     }
 

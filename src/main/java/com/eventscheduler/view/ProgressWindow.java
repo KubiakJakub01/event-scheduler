@@ -1,4 +1,4 @@
-package com.eventscheduler.controller;
+package com.eventscheduler.view;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
