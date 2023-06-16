@@ -2,7 +2,7 @@ package com.eventscheduler.controller.event;
 
 import com.eventscheduler.model.dao.CRUDOperationExecutor;
 import com.eventscheduler.model.dao.EventManager;
-import com.eventscheduler.model.dockument.EventModel;
+import com.eventscheduler.model.dockuments.EventModel;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

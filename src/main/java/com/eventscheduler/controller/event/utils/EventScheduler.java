@@ -1,7 +1,7 @@
 package com.eventscheduler.controller.event.utils;
 
 import com.eventscheduler.model.dao.EventManager;
-import com.eventscheduler.model.dockument.EventModel;
+import com.eventscheduler.model.dockuments.EventModel;
 import com.eventscheduler.observer.Observer;
 import javafx.application.Platform;
 import javafx.geometry.Insets;

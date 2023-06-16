@@ -1,4 +1,4 @@
-package com.eventscheduler.model.dockument;
+package com.eventscheduler.model.dockuments;
 
 /**
  * Model interface for Model-View-Controller Pattern

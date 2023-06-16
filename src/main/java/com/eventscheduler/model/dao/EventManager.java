@@ -1,7 +1,7 @@
 package com.eventscheduler.model.dao;
 
 import com.eventscheduler.controller.event.utils.EventObservable;
-import com.eventscheduler.model.dockument.EventModel;
+import com.eventscheduler.model.dockuments.EventModel;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;

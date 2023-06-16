@@ -20,8 +20,8 @@ module com.example.eventscheduler {
     opens com.eventscheduler.observer to javafx.fxml;
     exports com.eventscheduler.view;
     opens com.eventscheduler.view to javafx.fxml;
-    exports com.eventscheduler.model.dockument;
-    opens com.eventscheduler.model.dockument to javafx.fxml;
+    exports com.eventscheduler.model.dockuments;
+    opens com.eventscheduler.model.dockuments to javafx.fxml;
     exports com.eventscheduler.model.dao;
     opens com.eventscheduler.model.dao to javafx.fxml;
 }

@@ -1,13 +1,13 @@
 package com.eventscheduler.model.dao;
 
-import com.eventscheduler.model.dockument.EventModel;
+import com.eventscheduler.model.dockuments.EventModel;
 import com.eventscheduler.view.ProgressWindow;
 
 /**
  * Class for executing CRUD operations in a separate thread with a progress window
  */
 public class CRUDOperationExecutor {
-    private EventManager eventManager;
+    private final EventManager eventManager;
 
     /**
      * Constructs a CRUDOperationExecutor object with the given event manager

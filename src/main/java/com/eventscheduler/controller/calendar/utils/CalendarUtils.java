@@ -1,7 +1,7 @@
 package com.eventscheduler.controller.calendar.utils;
 
 import com.eventscheduler.controller.calendar.CalendarController;
-import com.eventscheduler.model.dockument.EventModel;
+import com.eventscheduler.model.dockuments.EventModel;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -15,19 +15,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CalendarUtils {
+public record CalendarUtils(CalendarController calendarController) {
     private static final System.Logger logger = System.getLogger(CalendarUtils.class.getName());
-
-    private CalendarController calendarController;
-
-    public CalendarUtils(CalendarController calendarController) {
-        this.calendarController = calendarController;
-    }
 
     /**
      * Draw calendar with month and year
      */
-    public FlowPane drawCalendar() {
+    public void drawCalendar() {
         FlowPane calendarPane = calendarController.getCalendarPane();
         LocalDateTime dateFocus = calendarController.getDateFocus();
         LocalDateTime today = LocalDateTime.now();
@@ -38,11 +32,9 @@ public class CalendarUtils {
         double spacingH = calendarPane.getHgap();
         double spacingV = calendarPane.getVgap();
 
-        //List of activities for a given month
         Map<Integer, List<EventModel>> calendarActivityMap = getCalendarActivitiesMonth(dateFocus);
 
         int monthMaxDate = dateFocus.getMonth().maxLength();
-        //Check for leap year
         if (dateFocus.getYear() % 4 != 0 && monthMaxDate == 29) {
             monthMaxDate = 28;
         }
@@ -83,7 +75,6 @@ public class CalendarUtils {
                 calendarPane.getChildren().add(stackPane);
             }
         }
-        return calendarPane;
     }
 
     /**
@@ -101,14 +92,12 @@ public class CalendarUtils {
                 Text moreActivities = new Text("...");
                 calendarActivityBox.getChildren().add(moreActivities);
                 moreActivities.setOnMouseClicked(mouseEvent -> {
-                    //On Text clicked
                     logger.log(System.Logger.Level.INFO, "Event clicked");
                     calendarController.drawDayEvents(calendarActivities.get(0).getDate());
                 });
                 break;
             }
             StringBuffer sb = new StringBuffer();
-            // Take maximal 8 characters for the place
             sb.append(calendarActivities.get(k).getPlace(), 0, Math.min(calendarActivities.get(k).getPlace().length(), 8));
             sb.append(", ");
             sb.append(calendarActivities.get(k).getDate().toLocalTime());
@@ -116,7 +105,6 @@ public class CalendarUtils {
             calendarActivityBox.getChildren().add(text);
             int finalK = k;
             text.setOnMouseClicked(mouseEvent -> {
-                //On Text clicked
                 logger.log(System.Logger.Level.INFO, "Event clicked");
                 calendarController.openDetailEventWindow(calendarActivities.get(finalK));
             });

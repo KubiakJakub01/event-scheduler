@@ -4,7 +4,7 @@ import com.eventscheduler.controller.calendar.utils.CalendarUtils;
 import com.eventscheduler.controller.calendar.utils.DrawEventsUtils;
 import com.eventscheduler.controller.calendar.utils.FXMLViewLoaderUtils;
 import com.eventscheduler.model.dao.EventManager;
-import com.eventscheduler.model.dockument.EventModel;
+import com.eventscheduler.model.dockuments.EventModel;
 import com.eventscheduler.observer.Observer;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -31,12 +31,10 @@ import java.util.ResourceBundle;
  */
 public class CalendarController implements Initializable, Observer {
     private static final System.Logger logger = System.getLogger(EventModel.class.getName());
-    private static final int MAX_EVENT_PER_DAY = 3;
     private int LIMIT_UPCOMING_EVENT = 5;
 
     private EventManager eventManager;
     private LocalDateTime dateFocus;
-    private LocalDateTime today;
     private LocalDateTime selectedDate;
     private FXMLViewLoaderUtils fxmlViewLoaderUtils;
     private CalendarUtils calendarUtils;
@@ -72,7 +70,6 @@ public class CalendarController implements Initializable, Observer {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         dateFocus = LocalDateTime.now();
-        today = LocalDateTime.now();
         selectedDate = LocalDateTime.now();
         initSpinners();
         initTimeLabel();
@@ -138,7 +135,6 @@ public class CalendarController implements Initializable, Observer {
      * Init hour and minute spinner
      */
     private void initSpinners() {
-        // Init event limit spinner
         eventLimitSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, LIMIT_UPCOMING_EVENT));
         eventLimitSpinner.valueProperty().addListener((obs, oldValue, newValue) -> {
             LIMIT_UPCOMING_EVENT = (int) newValue;
@@ -190,11 +186,9 @@ public class CalendarController implements Initializable, Observer {
      * Draw calendar with month and year
      */
     private void drawCalendar() {
-        // Draw month and year
         yearText.setText(String.valueOf(dateFocus.getYear()));
         monthText.setText(dateFocus.getMonth().toString());
 
-        // Draw calendar
         calendarPane.getChildren().clear();
         calendarUtils.drawCalendar();
     }
@@ -235,47 +229,8 @@ public class CalendarController implements Initializable, Observer {
         return dateFocus;
     }
 
-    public LocalDateTime getToday() {
-        return today;
-    }
-
-    public LocalDateTime getSelectedDate() {
-        return selectedDate;
-    }
-
-    public void setSelectedDate(LocalDateTime selectedDate) {
-        this.selectedDate = selectedDate;
-    }
-
-    public FXMLViewLoaderUtils getFxmlViewLoaderUtils() {
-        return fxmlViewLoaderUtils;
-    }
-
-    public Text getYearText() {
-        return yearText;
-    }
-
-    public Text getMonthText() {
-        return monthText;
-    }
-
-    public Label getTimeLabel() {
-        return timeLabel;
-    }
-
     public FlowPane getCalendarPane() {
         return calendarPane;
     }
 
-    public FlowPane getEventListPane() {
-        return eventListPane;
-    }
-
-    public FlowPane getDayEventListPane() {
-        return dayEventListPane;
-    }
-
-    public Spinner getEventLimitSpinner() {
-        return eventLimitSpinner;
-    }
 }
