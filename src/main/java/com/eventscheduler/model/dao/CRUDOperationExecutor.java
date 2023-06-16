@@ -1,12 +1,13 @@
-package com.eventscheduler.model;
+package com.eventscheduler.model.dao;
 
-import com.eventscheduler.controller.ProgressWindow;
+import com.eventscheduler.model.dockuments.EventModel;
+import com.eventscheduler.view.ProgressWindow;
 
 /**
  * Class for executing CRUD operations in a separate thread with a progress window
  */
 public class CRUDOperationExecutor {
-    private EventManager eventManager;
+    private final EventManager eventManager;
 
     /**
      * Constructs a CRUDOperationExecutor object with the given event manager
@@ -22,7 +23,7 @@ public class CRUDOperationExecutor {
      *
      * @param event the event to be added
      */
-    public void addWithProgress(EventModel event){
+    public void addWithProgress(EventModel event) {
         ProgressWindow progressWindow = new ProgressWindow("Adding event...");
         progressWindow.startProgressWindow();
         Thread thread = new Thread(() -> {
@@ -46,7 +47,7 @@ public class CRUDOperationExecutor {
      *
      * @param event the event to be deleted
      */
-    public void deleteWithProgress(EventModel event){
+    public void deleteWithProgress(EventModel event) {
         ProgressWindow progressWindow = new ProgressWindow("Deleting event...");
         progressWindow.startProgressWindow();
         Thread thread = new Thread(() -> {
@@ -68,10 +69,10 @@ public class CRUDOperationExecutor {
     /**
      * Updates an event in the event manager with a progress window
      *
-     * @param event the event to be updated
+     * @param event        the event to be updated
      * @param updatedEvent the updated event
      */
-    public void updateWithProgress(EventModel event, EventModel updatedEvent){
+    public void updateWithProgress(EventModel event, EventModel updatedEvent) {
         ProgressWindow progressWindow = new ProgressWindow("Updating event...");
         progressWindow.startProgressWindow();
         Thread thread = new Thread(() -> {

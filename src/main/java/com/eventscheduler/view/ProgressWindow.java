@@ -1,4 +1,4 @@
-package com.eventscheduler.controller;
+package com.eventscheduler.view;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 public class ProgressWindow {
     private ProgressBar progressBar;
     private Stage stage;
-    private Label label;
+    private final Label label;
 
     /**
      * Constructs a ProgressWindow object with the given title.
